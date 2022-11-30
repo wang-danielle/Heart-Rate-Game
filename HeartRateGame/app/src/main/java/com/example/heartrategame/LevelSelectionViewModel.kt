@@ -11,7 +11,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 
-class SelectActivityViewModel : ViewModel() {
+class LevelSelectionViewModel : ViewModel() {
     private val database = FirebaseDatabase.getInstance()
     private val storageRef = FirebaseStorage.getInstance().getReference()
     var itemAdapter: ItemAdapter? = null

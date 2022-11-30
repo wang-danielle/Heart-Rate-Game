@@ -1,7 +1,6 @@
 package com.example.heartrategame
 
 import android.content.Context
-import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +10,10 @@ import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.heartrategame.databinding.ActivityRowBinding.inflate
 
 class ItemAdapter(val context: Context, val activityNames: ArrayList<String>, val activityImageUris: ArrayList<Uri>): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(context).inflate(R.layout.activity_row, parent, false)
+        val itemView = LayoutInflater.from(context).inflate(R.layout.level_row, parent, false)
         val height = parent.measuredHeight / 7
         itemView.layoutParams.height = height
         return ViewHolder(

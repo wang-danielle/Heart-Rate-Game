@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/selectActivityFragment"
-        android:name="com.example.heartrategame.SelectActivityFragment"
+        android:name="com.example.heartrategame.LevelSelectionFragment"
         android:label="fragment_select_activity"
-        tools:layout="@layout/fragment_select_activity" >
+        tools:layout="@layout/fragment_level_selection" >
         <action
             android:id="@+id/action_selectActivityFragment_to_timeSelectionFragment"
             app:destination="@id/timeSelectionFragment" />

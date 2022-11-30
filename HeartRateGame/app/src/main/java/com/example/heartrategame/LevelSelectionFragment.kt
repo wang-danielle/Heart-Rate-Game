@@ -9,24 +9,24 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.heartrategame.databinding.FragmentSelectActivityBinding
+import com.example.heartrategame.databinding.FragmentLevelSelectionBinding
 
-class SelectActivityFragment : Fragment() {
+class LevelSelectionFragment : Fragment() {
 
-    private lateinit var binding: FragmentSelectActivityBinding
+    private lateinit var binding: FragmentLevelSelectionBinding
 
     companion object {
-        fun newInstance() = SelectActivityFragment()
+        fun newInstance() = LevelSelectionFragment()
     }
 
-    private lateinit var viewModel: SelectActivityViewModel
+    private lateinit var viewModel: LevelSelectionViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(SelectActivityViewModel::class.java)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_select_activity, container, false)
+        viewModel = ViewModelProvider(this).get(LevelSelectionViewModel::class.java)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_level_selection, container, false)
 
         binding.activityRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         viewModel.listenForActivities(context)
