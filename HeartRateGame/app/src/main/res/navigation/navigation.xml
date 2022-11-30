@@ -9,5 +9,14 @@
         android:id="@+id/selectActivityFragment"
         android:name="com.example.heartrategame.SelectActivityFragment"
         android:label="fragment_select_activity"
-        tools:layout="@layout/fragment_select_activity" />
+        tools:layout="@layout/fragment_select_activity" >
+        <action
+            android:id="@+id/action_selectActivityFragment_to_timeSelectionFragment"
+            app:destination="@id/timeSelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/timeSelectionFragment"
+        android:name="com.example.heartrategame.TimeSelectionFragment"
+        android:label="fragment_time_selection"
+        tools:layout="@layout/fragment_time_selection" />
 </navigation>

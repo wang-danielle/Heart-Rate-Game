@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.heartrategame.databinding.ActivityRowBinding.inflate
@@ -29,6 +30,9 @@ class ItemAdapter(val context: Context, val activityNames: ArrayList<String>, va
             .load(activityImageUris[position])
             .into(holder.activityImage)
         holder.activityImage.setImageURI(activityImageUris[position])
+        holder.itemView.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_selectActivityFragment_to_timeSelectionFragment)
+        }
     }
 
     override fun getItemCount(): Int {
