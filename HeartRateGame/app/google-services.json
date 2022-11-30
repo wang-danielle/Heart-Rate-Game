@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "453300077302",
+    "project_id": "heart-rate-game",
+    "storage_bucket": "heart-rate-game.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453300077302:android:1acd0f4f814ffd2e8ee2d7",
+        "android_client_info": {
+          "package_name": "com.example.heartrategame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453300077302-iksup5acl72o75mcomf37e0ecbikj2pv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJxvXJcf8yyVysE63iwhJ3oyaZq1oFzZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453300077302-iksup5acl72o75mcomf37e0ecbikj2pv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
