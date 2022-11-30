@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.heartrategame.models.LevelDataClass
 
 class ItemAdapter(val context: Context, val levelNames: ArrayList<String>, val levelImageUris: ArrayList<Uri>): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,7 +30,9 @@ class ItemAdapter(val context: Context, val levelNames: ArrayList<String>, val l
             .into(holder.levelImage)
         holder.levelImage.setImageURI(levelImageUris[position])
         holder.itemView.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_selectActivityFragment_to_timeSelectionFragment)
+            val levelData = LevelDataClass(levelNames[position], levelImageUris[position])
+            val directions = LevelSelectionFragmentDirections.actionSelectActivityFragmentToTimeSelectionFragment(levelData)
+            Navigation.findNavController(it).navigate(directions)
         }
     }
 

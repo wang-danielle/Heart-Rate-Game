@@ -18,5 +18,12 @@
         android:id="@+id/timeSelectionFragment"
         android:name="com.example.heartrategame.TimeSelectionFragment"
         android:label="fragment_time_selection"
-        tools:layout="@layout/fragment_time_selection" />
+        tools:layout="@layout/fragment_time_selection" >
+        <argument
+            android:name="levelData"
+            app:argType="com.example.heartrategame.models.LevelDataClass" />
+        <action
+            android:id="@+id/action_timeSelectionFragment_to_selectActivityFragment"
+            app:destination="@id/selectActivityFragment" />
+    </fragment>
 </navigation>
