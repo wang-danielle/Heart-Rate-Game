@@ -34,7 +34,7 @@
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
         <TextView
-            android:id="@+id/activity_name"
+            android:id="@+id/level_name"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -53,7 +53,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.8"/>
             <ImageView
-                android:id="@+id/activity_image"
+                android:id="@+id/level_image"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintTop_toTopOf="parent"

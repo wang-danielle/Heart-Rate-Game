@@ -16,32 +16,32 @@ class LevelSelectionViewModel : ViewModel() {
     private val storageRef = FirebaseStorage.getInstance().getReference()
     var itemAdapter: ItemAdapter? = null
 
-    private val _activitiesUpdate = MutableLiveData<Boolean?>()
-    val activitiesUpdate: LiveData<Boolean?>
-        get() = _activitiesUpdate
+    private val _levelsUpdate = MutableLiveData<Boolean?>()
+    val levelsUpdate: LiveData<Boolean?>
+        get() = _levelsUpdate
 
-    fun listenForActivities(context: Context?, username: String? = null) {
-        val activitiesRef = database.getReference("activities")
+    fun listenForLevels(context: Context?, username: String? = null) {
+        val levelsRef = database.getReference("levels")
 
-        activitiesRef.addListenerForSingleValueEvent(object: ValueEventListener {
+        levelsRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val activityNames = ArrayList<String>()
-                val activityImageUris = ArrayList<Uri>()
-                for (activity in snapshot.children) {
-                    activity.key?.let {
-                        activityNames.add(it)
-                        val activityImageUri = Uri.parse(activity.getValue(String::class.java))
-                        activityImageUris.add(activityImageUri)
+                val levelNames = ArrayList<String>()
+                val levelImageUris = ArrayList<Uri>()
+                for (level in snapshot.children) {
+                    level.key?.let {
+                        levelNames.add(it)
+                        val levelImageUri = Uri.parse(level.getValue(String::class.java))
+                        levelImageUris.add(levelImageUri)
                     }
                 }
                 itemAdapter = context?.let {
                     ItemAdapter(
                         context = it,
-                        activityNames = activityNames,
-                        activityImageUris = activityImageUris
+                        levelNames = levelNames,
+                        levelImageUris = levelImageUris
                     )
                 }
-                _activitiesUpdate.value = true
+                _levelsUpdate.value = true
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -51,6 +51,6 @@ class LevelSelectionViewModel : ViewModel() {
     }
 
     fun resetUpdate() {
-        _activitiesUpdate.value = false
+        _levelsUpdate.value = false
     }
 }

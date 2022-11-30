@@ -11,7 +11,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class ItemAdapter(val context: Context, val activityNames: ArrayList<String>, val activityImageUris: ArrayList<Uri>): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+class ItemAdapter(val context: Context, val levelNames: ArrayList<String>, val levelImageUris: ArrayList<Uri>): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.level_row, parent, false)
         val height = parent.measuredHeight / 7
@@ -22,23 +22,23 @@ class ItemAdapter(val context: Context, val activityNames: ArrayList<String>, va
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.activityName.text = activityNames[position]
+        holder.levelName.text = levelNames[position]
         Glide
             .with(context)
-            .load(activityImageUris[position])
-            .into(holder.activityImage)
-        holder.activityImage.setImageURI(activityImageUris[position])
+            .load(levelImageUris[position])
+            .into(holder.levelImage)
+        holder.levelImage.setImageURI(levelImageUris[position])
         holder.itemView.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_selectActivityFragment_to_timeSelectionFragment)
         }
     }
 
     override fun getItemCount(): Int {
-        return activityNames.size
+        return levelNames.size
     }
     
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        var activityName = view.findViewById<TextView>(R.id.activity_name)
-        var activityImage = view.findViewById<ImageView>(R.id.activity_image)
+        var levelName = view.findViewById<TextView>(R.id.level_name)
+        var levelImage = view.findViewById<ImageView>(R.id.level_image)
     }
 }
