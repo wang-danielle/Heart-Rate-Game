@@ -25,5 +25,20 @@
         <action
             android:id="@+id/action_timeSelectionFragment_to_selectActivityFragment"
             app:destination="@id/selectActivityFragment" />
+        <action
+            android:id="@+id/action_timeSelectionFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.example.heartrategame.GameFragment"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_game" >
+        <action
+            android:id="@+id/action_gameFragment_to_selectActivityFragment"
+            app:destination="@id/selectActivityFragment" />
+        <argument
+            android:name="levelData"
+            app:argType="com.example.heartrategame.models.LevelDataClass" />
     </fragment>
 </navigation>

@@ -1,8 +1,16 @@
 <resources>
     <string name="app_name">Heart Rate Game</string>
-    <string name="activitiesTitle">Activities</string>
+    <string name="levels_title">Levels</string>
     <string name="login">Login</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="startActivityText">Start!</string>
+    <string name="start_game_button_label">Start!</string>
+    <string name="select_time_title">Set Time</string>
+    <string name="minute_label">min</string>
+    <string name="second_label">sec</string>
+    <string name="quit_game_button_label">Quit</string>
+    <string name="remaining_time_label">TIME LEFT</string>
+    <string name="heartrate_value_label">YOUR HEARTRATE</string>
+    <string name="bpm_label">BPM</string>
+    <string name="back_button">Back Button</string>
 </resources>
