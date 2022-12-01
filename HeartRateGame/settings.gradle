@@ -13,4 +13,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Heart Rate Game"
-include ':app'
+include ':mobile'
+include ':wear'
