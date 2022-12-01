@@ -40,5 +40,17 @@
         <argument
             android:name="levelData"
             app:argType="com.example.heartrategame.models.LevelDataClass" />
+        <action
+            android:id="@+id/action_gameFragment_to_resultsFragment"
+            app:destination="@id/resultsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultsFragment"
+        android:name="com.example.heartrategame.ResultsFragment"
+        android:label="fragment_results"
+        tools:layout="@layout/fragment_results" >
+        <action
+            android:id="@+id/action_resultsFragment_to_selectActivityFragment"
+            app:destination="@id/selectActivityFragment" />
     </fragment>
 </navigation>

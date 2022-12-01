@@ -13,4 +13,5 @@
     <string name="heartrate_value_label">YOUR HEARTRATE</string>
     <string name="bpm_label">BPM</string>
     <string name="back_button">Back Button</string>
+    <string name="results_title">Results</string>
 </resources>

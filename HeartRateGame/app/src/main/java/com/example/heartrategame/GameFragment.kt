@@ -68,7 +68,7 @@ class GameFragment : Fragment() {
                 }
 
                 override fun onFinish() {
-
+                    view?.findNavController()?.navigate(R.id.action_gameFragment_to_resultsFragment)
                 }
             }.start()
         }
