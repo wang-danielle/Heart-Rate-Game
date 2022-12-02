@@ -7,12 +7,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.heartrategame.databinding.FragmentGameBinding
+import com.google.android.gms.wearable.DataClient
+import com.google.android.gms.wearable.Wearable
 import java.util.*
 
 class GameFragment : Fragment() {
@@ -32,6 +35,9 @@ class GameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
+        viewModel.dataClient = Wearable.getDataClient(activity as AppCompatActivity)
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_game, container, false)
 
         binding.quitButton.setOnClickListener {
@@ -64,7 +70,9 @@ class GameFragment : Fragment() {
         time?.let {
             object : CountDownTimer(it*MILLIS_PER_SEC, MILLIS_PER_SEC) {
                 override fun onTick(msLeft: Long) {
-                    binding.timeLeftTextView.text = formatTime(msLeft)
+                    val timeLeftText = formatTime(msLeft)
+                    binding.timeLeftTextView.text = timeLeftText
+                    viewModel.sendTimeToWear(timeLeftText)
                 }
 
                 override fun onFinish() {
@@ -72,6 +80,5 @@ class GameFragment : Fragment() {
                 }
             }.start()
         }
-
     }
 }
