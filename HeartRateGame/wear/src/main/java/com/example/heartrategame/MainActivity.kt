@@ -1,8 +1,8 @@
-package com.epfl.esl.heartrategame
+package com.example.heartrategame
 
 import android.app.Activity
 import android.os.Bundle
-import com.epfl.esl.heartrategame.databinding.ActivityMainBinding
+import com.example.heartrategame.databinding.ActivityMainBinding
 import com.google.android.gms.wearable.*
 
 class MainActivity : Activity(), DataClient.OnDataChangedListener {
