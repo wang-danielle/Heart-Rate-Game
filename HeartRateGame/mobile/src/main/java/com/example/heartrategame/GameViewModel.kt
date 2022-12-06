@@ -13,7 +13,7 @@ import com.google.android.gms.wearable.PutDataMapRequest
 class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     lateinit var dataClient: DataClient
     lateinit var level: LevelDataClass // TODO: factory instead of lateinit
-    val MILLIS_PER_SEC = 1000L // TODO: duplicated in fragment
+    val MILLIS_PER_SEC = 1000L
     private var exerciseIndex = 0;
     private var nextExerciseTime = -1L;
 
@@ -23,6 +23,12 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     private val _heartRate = MutableLiveData<Int>()
     val heartRate: LiveData<Int>
         get() = _heartRate
+    private val _maxHeartRate = MutableLiveData<Int>(0)
+    val maxHeartRate: LiveData<Int>
+        get() = _maxHeartRate
+    private val _minHeartRate = MutableLiveData<Int>(Int.MAX_VALUE)
+    val minHeartRate: LiveData<Int>
+        get() = _minHeartRate
 
     fun setFirstExercise() {
         exerciseIndex = 0
@@ -95,9 +101,16 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         dataEvents.filter { it.dataItem.uri.path == "/heartRate" }
             .forEach { event ->
-                _heartRate.value = DataMapItem.fromDataItem(event.dataItem)
+                val hr = DataMapItem.fromDataItem(event.dataItem)
                     .dataMap
                     .getInt("heartRate")
+                _heartRate.value = hr
+                if (hr > (_maxHeartRate.value ?: 0)) {
+                    _maxHeartRate.value = hr
+                }
+                if (hr < (_minHeartRate.value ?: Int.MAX_VALUE)) {
+                    _minHeartRate.value = hr
+                }
             }
     }
 }

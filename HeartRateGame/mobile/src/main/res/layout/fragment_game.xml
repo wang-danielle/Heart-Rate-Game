@@ -63,22 +63,47 @@ tools:context=".GameFragment">
             android:gravity="center">
             <TextView
                 android:id="@+id/bpm_text_view"
+                android:text="-"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="50sp"/>
             <TextView
+                android:layout_marginStart="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/bpm_label"
                 android:textColor="@color/white"
                 android:gravity="center"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/min_hr_text_view"
+                android:text="MIN: -"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_marginEnd="5dp"/>
+            <TextView
+                android:layout_marginStart="5dp"
+                android:id="@+id/max_hr_text_view"
+                android:text="MAX: -"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:gravity="center"/>
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="0.5"
             />
         <LinearLayout
             android:layout_width="match_parent"

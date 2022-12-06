@@ -47,7 +47,6 @@ class GameFragment : Fragment() {
         val levelData = args.levelData
         viewModel.level = levelData
 
-        binding.bpmTextView.text = "0"
         totalTime = levelData.totalTime
         binding.timeLeftTextView.text = viewModel.formatTime(totalTime * viewModel.MILLIS_PER_SEC)
 
@@ -59,6 +58,14 @@ class GameFragment : Fragment() {
 
         viewModel.heartRate.observe(viewLifecycleOwner, Observer { heartRate ->
             binding.bpmTextView.text = heartRate.toString()
+        })
+        viewModel.minHeartRate.observe(viewLifecycleOwner, Observer { minHR ->
+            if (minHR == Int.MAX_VALUE) return@Observer
+            binding.minHrTextView.text = "MIN: $minHR bpm"
+        })
+        viewModel.maxHeartRate.observe(viewLifecycleOwner, Observer { maxHR ->
+            if (maxHR == 0) return@Observer
+            binding.maxHrTextView.text = "MAX: $maxHR bpm"
         })
         getDataClient(activity as MainActivity).addListener(viewModel)
 
