@@ -9,21 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.heartrategame.databinding.FragmentGameBinding
-import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.Wearable
-import java.util.*
 
 class GameFragment : Fragment() {
-
     private lateinit var binding: FragmentGameBinding
-    private var timer = Timer()
-    private var time: Long? = null
-    private val MILLIS_PER_SEC = 1000L
+    private var totalTime: Long = -1
+    private lateinit var timer: CountDownTimer
 
     companion object {
         fun newInstance() = GameFragment()
@@ -42,43 +38,38 @@ class GameFragment : Fragment() {
 
         binding.quitButton.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_gameFragment_to_selectActivityFragment)
+            timer.cancel();
         }
 
         val args: GameFragmentArgs by navArgs()
         val levelData = args.levelData
-        binding.activityName.text = levelData.name
-        Glide
-            .with(this)
-            .load(levelData.imageUri)
-            .into(binding.activityImage)
+        viewModel.level = levelData
+
         binding.bpmTextView.text = "0"
-        time = levelData.time
-        time?.let { binding.timeLeftTextView.text = formatTime(it * MILLIS_PER_SEC) }
+        totalTime = levelData.totalTime
+        binding.timeLeftTextView.text = viewModel.formatTime(totalTime * viewModel.MILLIS_PER_SEC)
+
+        viewModel.currentExercise.observe(viewLifecycleOwner, Observer { exercise ->
+            binding.activityName.text = exercise.title
+            binding.activityImage.setImageResource(exercise.imageResource)
+        })
+        viewModel.setFirstExercise()
 
         return binding.root
     }
 
-    private fun formatTime(msLeft: Long): String {
-        val secsLeft = msLeft / MILLIS_PER_SEC
-        val mins = secsLeft / 60
-        val secs = secsLeft % 60
-        return "$mins:${secs.toString().padStart(2, '0')}"
-    }
-
     override fun onResume() {
         super.onResume()
-        time?.let {
-            object : CountDownTimer(it*MILLIS_PER_SEC, MILLIS_PER_SEC) {
-                override fun onTick(msLeft: Long) {
-                    val timeLeftText = formatTime(msLeft)
-                    binding.timeLeftTextView.text = timeLeftText
-                    viewModel.sendTimeToWear(timeLeftText)
-                }
+        timer = object : CountDownTimer(totalTime*viewModel.MILLIS_PER_SEC, viewModel.MILLIS_PER_SEC) {
+            override fun onTick(msLeft: Long) {
+                val timeLeftText = viewModel.formatTime(msLeft)
+                binding.timeLeftTextView.text = timeLeftText
+                viewModel.sendTimeToWear(msLeft)
+            }
 
-                override fun onFinish() {
-                    view?.findNavController()?.navigate(R.id.action_gameFragment_to_resultsFragment)
-                }
-            }.start()
-        }
+            override fun onFinish() {
+                view?.findNavController()?.navigate(R.id.action_gameFragment_to_resultsFragment)
+            }
+        }.start()
     }
 }

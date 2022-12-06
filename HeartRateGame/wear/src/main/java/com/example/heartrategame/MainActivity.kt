@@ -1,8 +1,11 @@
 package com.example.heartrategame
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
 import com.example.heartrategame.databinding.ActivityMainBinding
+import com.example.heartrategame.models.Exercise
 import com.google.android.gms.wearable.*
 
 class MainActivity : Activity(), DataClient.OnDataChangedListener {
@@ -30,14 +33,35 @@ class MainActivity : Activity(), DataClient.OnDataChangedListener {
     }
 
     override fun onDataChanged(dataEvents: DataEventBuffer) {
-        dataEvents.filter { it.type == DataEvent.TYPE_CHANGED
-                && it.dataItem.uri.path == "/gameInfo" }
+        dataEvents.filter { it.dataItem.uri.path == "/newTimeRequest" }
             .forEach { event ->
                 val timeLeft = DataMapItem.fromDataItem(event.dataItem)
                     .dataMap
                     .getString("timeLeft")
 
-                binding.topTextView.text = timeLeft
+                binding.bottomTextView.text = timeLeft
             }
+        dataEvents.filter { it.dataItem.uri.path == "/newExerciseRequest" }
+            .forEach { event ->
+                val timeLeft = DataMapItem.fromDataItem(event.dataItem)
+                    .dataMap
+                    .getString("timeLeft")
+                binding.bottomTextView.text = timeLeft
+
+                val newExercise = DataMapItem.fromDataItem(event.dataItem)
+                    .dataMap
+                    .getInt("newExercise", -1)
+                val exercise = Exercise.values()[newExercise]
+                displayExercise(exercise)
+            }
+    }
+
+    private fun displayExercise(exercise: Exercise) {
+        binding.topTextView.text = exercise.title
+        binding.image.setImageResource(exercise.imageResource)
+        binding.image.setColorFilter(Color.WHITE)
+        binding.parentView.setBackgroundColor(
+            ResourcesCompat.getColor(resources, R.color.pink_600, null)
+        )
     }
 }

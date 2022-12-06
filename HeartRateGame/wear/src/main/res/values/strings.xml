@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Heart Rate Game</string>
     <string name="title_activity_main">Heart Rate Game</string>
+    <string name="welcome_text">Welcome!</string>
 </resources>

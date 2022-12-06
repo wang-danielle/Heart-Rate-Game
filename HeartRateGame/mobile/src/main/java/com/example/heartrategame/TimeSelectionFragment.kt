@@ -43,14 +43,28 @@ class TimeSelectionFragment : Fragment() {
             binding.timeSetDialog.visibility = GONE
         }
         binding.levelName.text = levelData.name
-        Glide
-            .with(this)
-            .load(levelData.imageUri)
-            .into(binding.levelImage)
+        if (levelData.createdBy == null) {
+            binding.levelImage.setImageResource(levelData.exercises[0].first.imageResource)
+        } else if (levelData.imageUri == null) {
+            binding.levelImage.setImageResource(R.drawable.combo)
+        } else {
+            Glide
+                .with(this)
+                .load(levelData.imageUri)
+                .into(binding.levelImage)
+        }
+
         binding.startButton.setOnClickListener {
-            val minutes = binding.minutesPicker.value
-            val seconds = binding.secondsPicker.value
-            levelData.time = (minutes*60 + seconds).toLong()
+            if (levelData.createdBy == null) {
+                val minutes = binding.minutesPicker.value
+                val seconds = binding.secondsPicker.value
+                val totalTime = (minutes*60 + seconds).toLong()
+                val exercise = levelData.exercises[0].first
+                levelData.exercises.removeAt(0)
+                levelData.exercises.add(Pair(exercise, totalTime))
+                levelData.totalTime = totalTime
+            }
+
             val directions = TimeSelectionFragmentDirections.actionTimeSelectionFragmentToGameFragment(levelData)
             Navigation.findNavController(it).navigate(directions)
         }
