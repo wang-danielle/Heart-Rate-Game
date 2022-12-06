@@ -61,6 +61,25 @@ class GameViewModel : ViewModel() {
         val putTask = dataClient.putDataItem(request)
     }
 
+    fun sendQuitToWear() {
+        val request = PutDataMapRequest.create("/quitRequest").run {
+            dataMap.putLong("now", System.currentTimeMillis())
+            asPutDataRequest()
+        }
+        request.setUrgent()
+        dataClient.putDataItem(request)
+    }
+
+    fun sendResultsToWear() {
+        val request = PutDataMapRequest.create("/resultsRequest").run {
+            dataMap.putLong("now", System.currentTimeMillis())
+            dataMap.putInt("score", 123) // TODO: temp score, replace when score implemented
+            asPutDataRequest()
+        }
+        request.setUrgent()
+        dataClient.putDataItem(request)
+    }
+
     fun formatTime(msLeft: Long): String {
         val secsLeft = msLeft / MILLIS_PER_SEC
         val mins = secsLeft / 60

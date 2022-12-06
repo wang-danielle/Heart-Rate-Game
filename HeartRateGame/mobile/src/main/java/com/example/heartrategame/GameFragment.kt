@@ -38,7 +38,8 @@ class GameFragment : Fragment() {
 
         binding.quitButton.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_gameFragment_to_selectActivityFragment)
-            timer.cancel();
+            timer.cancel()
+            viewModel.sendQuitToWear()
         }
 
         val args: GameFragmentArgs by navArgs()
@@ -68,6 +69,7 @@ class GameFragment : Fragment() {
             }
 
             override fun onFinish() {
+                viewModel.sendResultsToWear()
                 view?.findNavController()?.navigate(R.id.action_gameFragment_to_resultsFragment)
             }
         }.start()

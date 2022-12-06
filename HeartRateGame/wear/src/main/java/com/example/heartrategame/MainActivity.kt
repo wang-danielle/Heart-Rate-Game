@@ -50,9 +50,20 @@ class MainActivity : Activity(), DataClient.OnDataChangedListener {
 
                 val newExercise = DataMapItem.fromDataItem(event.dataItem)
                     .dataMap
-                    .getInt("newExercise", -1)
+                    .getInt("newExercise")
                 val exercise = Exercise.values()[newExercise]
                 displayExercise(exercise)
+            }
+        dataEvents.filter { it.dataItem.uri.path == "/quitRequest" }
+            .forEach {
+                displayHome()
+            }
+        dataEvents.filter { it.dataItem.uri.path == "/resultsRequest" }
+            .forEach { event ->
+                val score = DataMapItem.fromDataItem(event.dataItem)
+                    .dataMap
+                    .getInt("score")
+                displayResults(score)
             }
     }
 
@@ -62,6 +73,26 @@ class MainActivity : Activity(), DataClient.OnDataChangedListener {
         binding.image.setColorFilter(Color.WHITE)
         binding.parentView.setBackgroundColor(
             ResourcesCompat.getColor(resources, R.color.pink_600, null)
+        )
+    }
+
+    private fun displayHome() {
+        binding.topTextView.text = resources.getString(R.string.welcome_text)
+        binding.bottomTextView.text = ""
+        binding.image.setImageResource(R.drawable.ic_logo)
+        binding.image.clearColorFilter()
+        binding.parentView.setBackgroundColor(
+            ResourcesCompat.getColor(resources, R.color.black, null)
+        )
+    }
+
+    private fun displayResults(score: Int) {
+        binding.topTextView.text = "Results"
+        binding.bottomTextView.text = "Score: $score.toString()"
+        binding.image.setImageResource(R.drawable.ic_logo)
+        binding.image.clearColorFilter()
+        binding.parentView.setBackgroundColor(
+            ResourcesCompat.getColor(resources, R.color.black, null)
         )
     }
 }
