@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModel
 import com.example.heartrategame.models.Exercise
 import com.example.heartrategame.models.LevelDataClass
 import com.google.android.gms.wearable.DataClient
+import com.google.android.gms.wearable.DataEventBuffer
+import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.PutDataMapRequest
 
-class GameViewModel : ViewModel() {
+class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     lateinit var dataClient: DataClient
     lateinit var level: LevelDataClass // TODO: factory instead of lateinit
     val MILLIS_PER_SEC = 1000L // TODO: duplicated in fragment
@@ -18,6 +20,9 @@ class GameViewModel : ViewModel() {
     private val _currentExercise = MutableLiveData<Exercise>()
     val currentExercise: LiveData<Exercise>
         get() = _currentExercise
+    private val _heartRate = MutableLiveData<Int>()
+    val heartRate: LiveData<Int>
+        get() = _heartRate
 
     fun setFirstExercise() {
         exerciseIndex = 0
@@ -85,5 +90,14 @@ class GameViewModel : ViewModel() {
         val mins = secsLeft / 60
         val secs = secsLeft % 60
         return "$mins:${secs.toString().padStart(2, '0')}"
+    }
+
+    override fun onDataChanged(dataEvents: DataEventBuffer) {
+        dataEvents.filter { it.dataItem.uri.path == "/heartRate" }
+            .forEach { event ->
+                _heartRate.value = DataMapItem.fromDataItem(event.dataItem)
+                    .dataMap
+                    .getInt("heartRate")
+            }
     }
 }

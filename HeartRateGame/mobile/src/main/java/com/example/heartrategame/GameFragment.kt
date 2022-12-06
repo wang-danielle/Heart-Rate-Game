@@ -15,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.heartrategame.databinding.FragmentGameBinding
 import com.google.android.gms.wearable.Wearable
+import com.google.android.gms.wearable.Wearable.getDataClient
 
 class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
@@ -55,6 +56,11 @@ class GameFragment : Fragment() {
             binding.activityImage.setImageResource(exercise.imageResource)
         })
         viewModel.setFirstExercise()
+
+        viewModel.heartRate.observe(viewLifecycleOwner, Observer { heartRate ->
+            binding.bpmTextView.text = heartRate.toString()
+        })
+        getDataClient(activity as MainActivity).addListener(viewModel)
 
         return binding.root
     }

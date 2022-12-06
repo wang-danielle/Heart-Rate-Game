@@ -1,19 +1,38 @@
 package com.example.heartrategame
 
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.os.Build
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
 import com.example.heartrategame.databinding.ActivityMainBinding
 import com.example.heartrategame.models.Exercise
 import com.google.android.gms.wearable.*
 
-class MainActivity : Activity(), DataClient.OnDataChangedListener {
+class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedListener {
 
     private lateinit var binding: ActivityMainBinding
+    private var heartRate = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+            && checkSelfPermission("android.permission.BODY_SENSORS")
+            == PackageManager.PERMISSION_DENIED) {
+            requestPermissions(arrayOf("android.permission.BODY_SENSORS"), 0)
+        }
+
+        val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)?.also { heartRate ->
+            sensorManager.registerListener(this, heartRate,
+                SensorManager.SENSOR_DELAY_UI)
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -40,6 +59,8 @@ class MainActivity : Activity(), DataClient.OnDataChangedListener {
                     .getString("timeLeft")
 
                 binding.bottomTextView.text = timeLeft
+
+                sendHRToMobile()
             }
         dataEvents.filter { it.dataItem.uri.path == "/newExerciseRequest" }
             .forEach { event ->
@@ -88,11 +109,30 @@ class MainActivity : Activity(), DataClient.OnDataChangedListener {
 
     private fun displayResults(score: Int) {
         binding.topTextView.text = "Results"
-        binding.bottomTextView.text = "Score: $score.toString()"
+        binding.bottomTextView.text = "Score: ${score.toString()}"
         binding.image.setImageResource(R.drawable.ic_logo)
         binding.image.clearColorFilter()
         binding.parentView.setBackgroundColor(
             ResourcesCompat.getColor(resources, R.color.black, null)
         )
+    }
+
+    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        val heartRateReceived = event!!.values[0].toInt()
+        heartRate = heartRateReceived
+    }
+
+    private fun sendHRToMobile() {
+        val dataClient: DataClient = Wearable.getDataClient(this)
+        val request = PutDataMapRequest.create("/heartRate").run {
+            dataMap.putInt("heartRate", heartRate)
+            asPutDataRequest()
+        }
+        request.setUrgent()
+        dataClient.putDataItem(request)
     }
 }
