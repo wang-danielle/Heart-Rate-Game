@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/selectActivityFragment">
+    app:startDestination="@id/levelSelectionFragment">
 
     <fragment
-        android:id="@+id/selectActivityFragment"
+        android:id="@+id/levelSelectionFragment"
         android:name="com.example.heartrategame.LevelSelectionFragment"
-        android:label="fragment_select_activity"
+        android:label="fragment_level_selection"
         tools:layout="@layout/fragment_level_selection" >
         <action
-            android:id="@+id/action_selectActivityFragment_to_timeSelectionFragment"
+            android:id="@+id/action_levelSelectionFragment_to_timeSelectionFragment"
             app:destination="@id/timeSelectionFragment" />
         <action
-            android:id="@+id/action_selectActivityFragment_to_customLevelFragment"
+            android:id="@+id/action_levelSelectionFragment_to_customLevelFragment"
             app:destination="@id/customLevelFragment" />
     </fragment>
     <fragment
@@ -26,8 +26,8 @@
             android:name="levelData"
             app:argType="com.example.heartrategame.models.LevelDataClass" />
         <action
-            android:id="@+id/action_timeSelectionFragment_to_selectActivityFragment"
-            app:destination="@id/selectActivityFragment" />
+            android:id="@+id/action_timeSelectionFragment_to_levelSelectionFragment"
+            app:destination="@id/levelSelectionFragment" />
         <action
             android:id="@+id/action_timeSelectionFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
@@ -38,8 +38,8 @@
         android:label="fragment_game"
         tools:layout="@layout/fragment_game" >
         <action
-            android:id="@+id/action_gameFragment_to_selectActivityFragment"
-            app:destination="@id/selectActivityFragment" />
+            android:id="@+id/action_gameFragment_to_levelSelectionFragment"
+            app:destination="@id/levelSelectionFragment" />
         <argument
             android:name="levelData"
             app:argType="com.example.heartrategame.models.LevelDataClass" />
@@ -53,8 +53,8 @@
         android:label="fragment_results"
         tools:layout="@layout/fragment_results" >
         <action
-            android:id="@+id/action_resultsFragment_to_selectActivityFragment"
-            app:destination="@id/selectActivityFragment" />
+            android:id="@+id/action_resultsFragment_to_levelSelectionFragment"
+            app:destination="@id/levelSelectionFragment" />
     </fragment>
     <fragment
         android:id="@+id/customLevelFragment"
@@ -62,7 +62,7 @@
         android:label="fragment_custom_level"
         tools:layout="@layout/fragment_custom_level" >
         <action
-            android:id="@+id/action_customLevelFragment_to_selectActivityFragment"
-            app:destination="@id/selectActivityFragment" />
+            android:id="@+id/action_customLevelFragment_to_levelSelectionFragment"
+            app:destination="@id/levelSelectionFragment" />
     </fragment>
 </navigation>

@@ -27,7 +27,7 @@ class CustomLevelFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_custom_level, container, false)
 
         binding.backButton.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_customLevelFragment_to_selectActivityFragment)
+            view?.findNavController()?.navigate(R.id.action_customLevelFragment_to_levelSelectionFragment)
         }
 
         return binding.root

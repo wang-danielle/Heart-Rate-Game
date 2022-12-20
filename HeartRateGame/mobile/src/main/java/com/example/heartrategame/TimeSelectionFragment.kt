@@ -31,7 +31,7 @@ class TimeSelectionFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_time_selection, container, false)
 
         binding.backButton.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_timeSelectionFragment_to_selectActivityFragment)
+            view?.findNavController()?.navigate(R.id.action_timeSelectionFragment_to_levelSelectionFragment)
         }
 
         val args: TimeSelectionFragmentArgs by navArgs()

@@ -28,11 +28,11 @@ class LevelSelectionFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(LevelSelectionViewModel::class.java)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_level_selection, container, false)
 
-        binding.activityRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.levelRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         viewModel.listenForLevels(context)
         viewModel.levelsUpdate.observe(viewLifecycleOwner, Observer { activitiesUpdate ->
             if (activitiesUpdate == true) {
-                binding.activityRecyclerView.adapter = viewModel.itemAdapter
+                binding.levelRecyclerView.adapter = viewModel.itemAdapter
                 viewModel.resetUpdate()
             }
         })

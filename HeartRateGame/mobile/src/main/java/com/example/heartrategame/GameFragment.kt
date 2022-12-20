@@ -38,7 +38,7 @@ class GameFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_game, container, false)
 
         binding.quitButton.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_gameFragment_to_selectActivityFragment)
+            view?.findNavController()?.navigate(R.id.action_gameFragment_to_levelSelectionFragment)
             timer.cancel()
             viewModel.sendQuitToWear()
         }

@@ -28,7 +28,7 @@ class ItemAdapter(val context: Context, val levels: List<LevelDataClass>): Recyc
             holder.levelName.setTextColor(Color.GRAY)
             holder.bottomLine.visibility = View.INVISIBLE
             holder.itemView.setOnClickListener {
-                Navigation.findNavController(it).navigate(R.id.action_selectActivityFragment_to_customLevelFragment)
+                Navigation.findNavController(it).navigate(R.id.action_levelSelectionFragment_to_customLevelFragment)
             }
             return
         }
@@ -48,7 +48,7 @@ class ItemAdapter(val context: Context, val levels: List<LevelDataClass>): Recyc
         
         holder.itemView.setOnClickListener {
             val level = levels[position]
-            val directions = LevelSelectionFragmentDirections.actionSelectActivityFragmentToTimeSelectionFragment(level)
+            val directions = LevelSelectionFragmentDirections.actionLevelSelectionFragmentToTimeSelectionFragment(level)
             Navigation.findNavController(it).navigate(directions)
         }
     }
