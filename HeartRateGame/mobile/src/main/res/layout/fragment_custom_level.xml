@@ -34,9 +34,11 @@
                 android:gravity="center"
                 android:textSize="25sp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <View
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/exercise_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10"/>
+            android:layout_weight="10"
+            />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
