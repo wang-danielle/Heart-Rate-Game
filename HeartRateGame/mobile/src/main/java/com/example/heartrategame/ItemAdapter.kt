@@ -1,6 +1,7 @@
 package com.example.heartrategame
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,16 @@ class ItemAdapter(val context: Context, val levels: List<LevelDataClass>): Recyc
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (position == levels.size) {
+            holder.levelName.text = "Add custom level..."
+            holder.levelName.setTextColor(Color.GRAY)
+            holder.bottomLine.visibility = View.INVISIBLE
+            holder.itemView.setOnClickListener {
+                Navigation.findNavController(it).navigate(R.id.action_selectActivityFragment_to_customLevelFragment)
+            }
+            return
+        }
+
         val level = levels[position]
         holder.levelName.text = level.name
         if (level.createdBy == null) {
@@ -43,11 +54,12 @@ class ItemAdapter(val context: Context, val levels: List<LevelDataClass>): Recyc
     }
 
     override fun getItemCount(): Int {
-        return levels.size
+        return levels.size + 1
     }
     
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         var levelName = view.findViewById<TextView>(R.id.level_name)
         var levelImage = view.findViewById<ImageView>(R.id.level_image)
+        var bottomLine = view.findViewById<View>(R.id.bottom_line)
     }
 }

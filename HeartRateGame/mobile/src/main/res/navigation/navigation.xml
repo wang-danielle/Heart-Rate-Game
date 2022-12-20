@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_selectActivityFragment_to_timeSelectionFragment"
             app:destination="@id/timeSelectionFragment" />
+        <action
+            android:id="@+id/action_selectActivityFragment_to_customLevelFragment"
+            app:destination="@id/customLevelFragment" />
     </fragment>
     <fragment
         android:id="@+id/timeSelectionFragment"
@@ -51,6 +54,15 @@
         tools:layout="@layout/fragment_results" >
         <action
             android:id="@+id/action_resultsFragment_to_selectActivityFragment"
+            app:destination="@id/selectActivityFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/customLevelFragment"
+        android:name="com.example.heartrategame.CustomLevelFragment"
+        android:label="fragment_custom_level"
+        tools:layout="@layout/fragment_custom_level" >
+        <action
+            android:id="@+id/action_customLevelFragment_to_selectActivityFragment"
             app:destination="@id/selectActivityFragment" />
     </fragment>
 </navigation>
