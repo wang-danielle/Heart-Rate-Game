@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.heartrategame.models.LevelDataClass
 
-class ItemAdapter(val context: Context, val levels: List<LevelDataClass>): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+class LevelItemAdapter(val context: Context, val levels: List<LevelDataClass>): RecyclerView.Adapter<LevelItemAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.level_row, parent, false)
         val height = parent.measuredHeight / 7

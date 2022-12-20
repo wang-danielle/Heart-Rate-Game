@@ -32,7 +32,7 @@ class LevelSelectionFragment : Fragment() {
         viewModel.listenForLevels(context)
         viewModel.levelsUpdate.observe(viewLifecycleOwner, Observer { activitiesUpdate ->
             if (activitiesUpdate == true) {
-                binding.levelRecyclerView.adapter = viewModel.itemAdapter
+                binding.levelRecyclerView.adapter = viewModel.levelItemAdapter
                 viewModel.resetUpdate()
             }
         })

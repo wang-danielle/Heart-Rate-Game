@@ -1,21 +1,17 @@
 package com.example.heartrategame
 
 import android.content.Context
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.heartrategame.models.LevelDataClass
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 
 class LevelSelectionViewModel : ViewModel() {
     private val database = FirebaseDatabase.getInstance()
     private val storageRef = FirebaseStorage.getInstance().getReference()
-    var itemAdapter: ItemAdapter? = null
+    var levelItemAdapter: LevelItemAdapter? = null
 
     private val _levelsUpdate = MutableLiveData<Boolean?>()
     val levelsUpdate: LiveData<Boolean?>
@@ -25,8 +21,8 @@ class LevelSelectionViewModel : ViewModel() {
         val levelsRef = database.getReference("levels")
 
         // Allows base levels to be loaded even when there is no network
-        itemAdapter = context?.let {
-            ItemAdapter(
+        levelItemAdapter = context?.let {
+            LevelItemAdapter(
                 context = it,
                 levels = LevelDataClass.getBaseLevels()
             )
