@@ -67,6 +67,9 @@ class GameFragment : Fragment() {
             if (maxHR == 0) return@Observer
             binding.maxHrTextView.text = "MAX: $maxHR bpm"
         })
+        viewModel.avgHeartRate.observe(viewLifecycleOwner, Observer { avgHR ->
+            binding.avgHrTextView.text = "AVG: $avgHR bpm"
+        })
         getDataClient(activity as MainActivity).addListener(viewModel)
 
         return binding.root

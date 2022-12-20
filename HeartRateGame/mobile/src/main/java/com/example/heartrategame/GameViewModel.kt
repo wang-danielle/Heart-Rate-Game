@@ -9,13 +9,14 @@ import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.PutDataMapRequest
+import java.math.RoundingMode
 
 class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     lateinit var dataClient: DataClient
     lateinit var level: LevelDataClass // TODO: factory instead of lateinit
     val MILLIS_PER_SEC = 1000L
-    private var exerciseIndex = 0;
-    private var nextExerciseTime = -1L;
+    private var exerciseIndex = 0
+    private var nextExerciseTime = -1L
 
     private val _currentExercise = MutableLiveData<Exercise>()
     val currentExercise: LiveData<Exercise>
@@ -29,6 +30,10 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     private val _minHeartRate = MutableLiveData<Int>(Int.MAX_VALUE)
     val minHeartRate: LiveData<Int>
         get() = _minHeartRate
+    private val _avgHeartRate = MutableLiveData<Double>()
+    val avgHeartRate: LiveData<Double>
+        get() = _avgHeartRate
+    private var numHRReadings: Double = 0.0;
 
     fun setFirstExercise() {
         exerciseIndex = 0
@@ -69,7 +74,7 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
         }
 
         request.setUrgent()
-        val putTask = dataClient.putDataItem(request)
+        dataClient.putDataItem(request)
     }
 
     fun sendQuitToWear() {
@@ -111,6 +116,20 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
                 if (hr < (_minHeartRate.value ?: Int.MAX_VALUE)) {
                     _minHeartRate.value = hr
                 }
+                _avgHeartRate.value = computeAvgHeartRate(hr)
             }
+    }
+
+    private fun computeAvgHeartRate(newHeartRate: Int): Double {
+        numHRReadings++
+        var retVal = _avgHeartRate.value?.let {
+            if (it == 0.0) {
+                newHeartRate.toDouble()
+            } else {
+                it * ((numHRReadings - 1) / numHRReadings) + newHeartRate * (1 / numHRReadings)
+            }
+        } ?: newHeartRate.toDouble()
+        retVal = retVal.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
+        return retVal
     }
 }
