@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.heartrategame.models.Exercise
 
-class CustomLevelViewModel : ViewModel() {
-    val exercises = mutableListOf<Pair<Exercise, Long>>()
-    var exercisesItemAdapter: ExerciseTimeItemAdapter? = null
+class ExerciseSelectionViewModel : ViewModel() {
+    val exercises = Exercise.values()
+    var exercisesItemAdapter: ExerciseItemAdapter? = null
 
     private val _exercisesUpdate = MutableLiveData<Boolean?>()
     val exercisesUpdate: LiveData<Boolean?>
@@ -16,7 +16,7 @@ class CustomLevelViewModel : ViewModel() {
 
     fun listenForExercises(context: Context?) {
         exercisesItemAdapter = context?.let {
-            ExerciseTimeItemAdapter(
+            ExerciseItemAdapter(
                 context = it,
                 exercises = exercises,
             )

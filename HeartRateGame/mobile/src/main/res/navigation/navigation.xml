@@ -64,5 +64,17 @@
         <action
             android:id="@+id/action_customLevelFragment_to_levelSelectionFragment"
             app:destination="@id/levelSelectionFragment" />
+        <action
+            android:id="@+id/action_customLevelFragment_to_exerciseSelectionFragment"
+            app:destination="@id/exerciseSelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/exerciseSelectionFragment"
+        android:name="com.example.heartrategame.ExerciseSelectionFragment"
+        android:label="fragment_exercise_selection"
+        tools:layout="@layout/fragment_exercise_selection" >
+        <action
+            android:id="@+id/action_exerciseSelectionFragment_to_customLevelFragment"
+            app:destination="@id/customLevelFragment" />
     </fragment>
 </navigation>
