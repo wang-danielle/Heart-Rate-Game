@@ -10,8 +10,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.heartrategame.databinding.FragmentCustomLevelBinding
+import com.example.heartrategame.models.Exercise
 
 class CustomLevelFragment : Fragment() {
 
@@ -42,6 +44,15 @@ class CustomLevelFragment : Fragment() {
                 viewModel.resetUpdate()
             }
         })
+
+        findNavController()
+            .currentBackStackEntry
+            ?.savedStateHandle
+            ?.getLiveData<Pair<Exercise, Long>>("exercise")
+            ?.observe(viewLifecycleOwner) { result ->
+                viewModel.exercises.add(result)
+                viewModel.listenForExercises(context)
+        }
 
         return binding.root
     }

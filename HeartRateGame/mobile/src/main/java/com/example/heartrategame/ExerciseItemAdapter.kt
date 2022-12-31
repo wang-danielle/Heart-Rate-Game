@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.heartrategame.models.Exercise
 
@@ -24,7 +27,12 @@ class ExerciseItemAdapter(val context: Context, val exercises: Array<Exercise>):
         holder.exerciseName.text = exercise.title
         holder.exerciseImage.setImageResource(exercise.imageResource)
         holder.itemView.setOnClickListener {
-            
+            val navController = Navigation.findNavController(it)
+            navController
+                .previousBackStackEntry
+                ?.savedStateHandle
+                ?.set("exercise", Pair<Exercise, Long>(exercise, 0))
+            navController.popBackStack()
         }
     }
 
