@@ -24,16 +24,18 @@ class CustomLevelFragment : Fragment() {
     }
 
     private lateinit var viewModel: CustomLevelViewModel
+    private lateinit var sharedViewModel: SharedCustomLevelViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this).get(CustomLevelViewModel::class.java)
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedCustomLevelViewModel::class.java)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_custom_level, container, false)
 
         binding.backButton.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_customLevelFragment_to_levelSelectionFragment)
+            view?.findNavController()?.popBackStack()
         }
 
         binding.exerciseRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -45,14 +47,10 @@ class CustomLevelFragment : Fragment() {
             }
         })
 
-        findNavController()
-            .currentBackStackEntry
-            ?.savedStateHandle
-            ?.getLiveData<Pair<Exercise, Long>>("exercise")
-            ?.observe(viewLifecycleOwner) { result ->
-                viewModel.exercises.add(result)
-                viewModel.listenForExercises(context)
-        }
+        sharedViewModel.levelData.observe(viewLifecycleOwner, Observer { levelData ->
+            viewModel.exercises = levelData.exercises
+            viewModel.listenForExercises(context)
+        })
 
         return binding.root
     }

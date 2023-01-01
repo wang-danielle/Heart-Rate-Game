@@ -27,7 +27,7 @@ class ResultsFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_results, container, false)
 
         binding.backButton.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_resultsFragment_to_levelSelectionFragment)
+            view?.findNavController()?.popBackStack(R.id.levelSelectionFragment, false)
         }
 
         return binding.root

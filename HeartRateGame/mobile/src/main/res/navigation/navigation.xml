@@ -26,9 +26,6 @@
             android:name="levelData"
             app:argType="com.example.heartrategame.models.LevelDataClass" />
         <action
-            android:id="@+id/action_timeSelectionFragment_to_levelSelectionFragment"
-            app:destination="@id/levelSelectionFragment" />
-        <action
             android:id="@+id/action_timeSelectionFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
     </fragment>
@@ -37,9 +34,6 @@
         android:name="com.example.heartrategame.GameFragment"
         android:label="fragment_game"
         tools:layout="@layout/fragment_game" >
-        <action
-            android:id="@+id/action_gameFragment_to_levelSelectionFragment"
-            app:destination="@id/levelSelectionFragment" />
         <argument
             android:name="levelData"
             app:argType="com.example.heartrategame.models.LevelDataClass" />
@@ -51,19 +45,12 @@
         android:id="@+id/resultsFragment"
         android:name="com.example.heartrategame.ResultsFragment"
         android:label="fragment_results"
-        tools:layout="@layout/fragment_results" >
-        <action
-            android:id="@+id/action_resultsFragment_to_levelSelectionFragment"
-            app:destination="@id/levelSelectionFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_results" />
     <fragment
         android:id="@+id/customLevelFragment"
         android:name="com.example.heartrategame.CustomLevelFragment"
         android:label="fragment_custom_level"
         tools:layout="@layout/fragment_custom_level" >
-        <action
-            android:id="@+id/action_customLevelFragment_to_levelSelectionFragment"
-            app:destination="@id/levelSelectionFragment" />
         <action
             android:id="@+id/action_customLevelFragment_to_exerciseSelectionFragment"
             app:destination="@id/exerciseSelectionFragment" />
@@ -74,7 +61,16 @@
         android:label="fragment_exercise_selection"
         tools:layout="@layout/fragment_exercise_selection" >
         <action
-            android:id="@+id/action_exerciseSelectionFragment_to_customLevelFragment"
-            app:destination="@id/customLevelFragment" />
+            android:id="@+id/action_exerciseSelectionFragment_to_customLevelTimeSelectionFragment"
+            app:destination="@id/customLevelTimeSelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/customLevelTimeSelectionFragment"
+        android:name="com.example.heartrategame.CustomLevelTimeSelectionFragment"
+        android:label="fragment_custom_level_time_selection"
+        tools:layout="@layout/fragment_custom_level_time_selection" >
+        <argument
+            android:name="exercise"
+            app:argType="com.example.heartrategame.models.Exercise" />
     </fragment>
 </navigation>

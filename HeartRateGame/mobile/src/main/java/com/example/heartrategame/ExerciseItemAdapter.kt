@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -27,12 +28,8 @@ class ExerciseItemAdapter(val context: Context, val exercises: Array<Exercise>):
         holder.exerciseName.text = exercise.title
         holder.exerciseImage.setImageResource(exercise.imageResource)
         holder.itemView.setOnClickListener {
-            val navController = Navigation.findNavController(it)
-            navController
-                .previousBackStackEntry
-                ?.savedStateHandle
-                ?.set("exercise", Pair<Exercise, Long>(exercise, 0))
-            navController.popBackStack()
+            val directions = ExerciseSelectionFragmentDirections.actionExerciseSelectionFragmentToCustomLevelTimeSelectionFragment(exercise)
+            Navigation.findNavController(it).navigate(directions)
         }
     }
 
@@ -43,7 +40,5 @@ class ExerciseItemAdapter(val context: Context, val exercises: Array<Exercise>):
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         var exerciseName = view.findViewById<TextView>(R.id.level_name)
         var exerciseImage = view.findViewById<ImageView>(R.id.level_image)
-        var bottomLine = view.findViewById<View>(R.id.bottom_line)
-        var sideText = view.findViewById<TextView>(R.id.side_text)
     }
 }

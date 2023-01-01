@@ -1,4 +1,17 @@
 package com.example.heartrategame
 
-class SharedCustomLevelViewModel {
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.example.heartrategame.models.Exercise
+import com.example.heartrategame.models.LevelDataClass
+
+class SharedCustomLevelViewModel: ViewModel() {
+    private val _levelData = MutableLiveData(LevelDataClass(name = "", totalTime = 0))
+    val levelData: LiveData<LevelDataClass>
+        get() = _levelData
+
+    fun addExercise(exercise: Exercise, time: Long) {
+        _levelData.value?.exercises?.add(Pair<Exercise, Long>(exercise, time))
+    }
 }

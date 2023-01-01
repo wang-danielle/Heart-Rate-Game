@@ -10,22 +10,12 @@ class ExerciseSelectionViewModel : ViewModel() {
     val exercises = Exercise.values()
     var exercisesItemAdapter: ExerciseItemAdapter? = null
 
-    private val _exercisesUpdate = MutableLiveData<Boolean?>()
-    val exercisesUpdate: LiveData<Boolean?>
-        get() = _exercisesUpdate
-
-    fun listenForExercises(context: Context?) {
+    fun setupExercisesItemAdapter(context: Context?) {
         exercisesItemAdapter = context?.let {
             ExerciseItemAdapter(
                 context = it,
                 exercises = exercises,
             )
         }
-
-        _exercisesUpdate.value = true
-    }
-
-    fun resetUpdate() {
-        _exercisesUpdate.value = false
     }
 }

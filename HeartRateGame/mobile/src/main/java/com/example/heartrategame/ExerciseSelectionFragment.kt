@@ -30,17 +30,12 @@ class ExerciseSelectionFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_exercise_selection, container, false)
 
         binding.backButton.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_exerciseSelectionFragment_to_customLevelFragment)
+            view?.findNavController()?.popBackStack()
         }
 
         binding.exerciseRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        viewModel.listenForExercises(context)
-        viewModel.exercisesUpdate.observe(viewLifecycleOwner, Observer { exercisesUpdate ->
-            if (exercisesUpdate == true) {
-                binding.exerciseRecyclerView.adapter = viewModel.exercisesItemAdapter
-                viewModel.resetUpdate()
-            }
-        })
+        viewModel.setupExercisesItemAdapter(context)
+        binding.exerciseRecyclerView.adapter = viewModel.exercisesItemAdapter
 
         return binding.root
     }
