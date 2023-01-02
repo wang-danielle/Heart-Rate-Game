@@ -36,6 +36,7 @@ class CustomLevelFragment : Fragment() {
 
         binding.backButton.setOnClickListener {
             view?.findNavController()?.popBackStack()
+            sharedViewModel.resetLevel()
         }
 
         binding.exerciseRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

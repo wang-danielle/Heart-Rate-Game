@@ -11,6 +11,10 @@ class SharedCustomLevelViewModel: ViewModel() {
     val levelData: LiveData<LevelDataClass>
         get() = _levelData
 
+    fun resetLevel() {
+        _levelData.value = LevelDataClass(name = "", totalTime = 0)
+    }
+
     fun addExercise(exercise: Exercise, time: Long) {
         _levelData.value?.exercises?.add(Pair<Exercise, Long>(exercise, time))
     }
