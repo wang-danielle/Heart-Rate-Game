@@ -14,7 +14,7 @@ import com.example.heartrategame.models.Exercise
 class ExerciseTimeItemAdapter(val context: Context, val exercises: List<Pair<Exercise, Long?>>): RecyclerView.Adapter<ExerciseTimeItemAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.level_row, parent, false)
-        val height = parent.measuredHeight / 5.6
+        val height = (parent.parent as ViewGroup).measuredHeight / 7
         itemView.layoutParams.height = height.toInt()
         return ViewHolder(
             itemView
