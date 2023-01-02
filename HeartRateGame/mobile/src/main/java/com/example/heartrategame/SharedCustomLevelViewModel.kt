@@ -1,5 +1,6 @@
 package com.example.heartrategame
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,5 +18,9 @@ class SharedCustomLevelViewModel: ViewModel() {
 
     fun addExercise(exercise: Exercise, time: Long) {
         _levelData.value?.exercises?.add(Pair<Exercise, Long>(exercise, time))
+    }
+
+    fun setImage(imageUri: Uri?) {
+        _levelData.value?.imageUri = imageUri
     }
 }

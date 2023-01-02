@@ -1,12 +1,15 @@
 package com.example.heartrategame
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -18,6 +21,14 @@ import com.example.heartrategame.models.Exercise
 class CustomLevelFragment : Fragment() {
 
     private lateinit var binding: FragmentCustomLevelBinding
+    var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val imageUri: Uri? = result.data?.data
+                sharedViewModel.setImage(imageUri)
+                binding.levelImageButton.setImageURI(imageUri)
+            }
+        }
 
     companion object {
         fun newInstance() = CustomLevelFragment()
@@ -37,6 +48,14 @@ class CustomLevelFragment : Fragment() {
         binding.backButton.setOnClickListener {
             view?.findNavController()?.popBackStack()
             sharedViewModel.resetLevel()
+        }
+        sharedViewModel.levelData.value?.imageUri?.let {
+            binding.levelImageButton.setImageURI(it)
+        }
+        binding.levelImageButton.setOnClickListener {
+            val imgIntent = Intent(Intent.ACTION_GET_CONTENT)
+            imgIntent.setType("image/*")
+            resultLauncher.launch(imgIntent)
         }
 
         binding.exerciseRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

@@ -9,7 +9,7 @@ data class LevelDataClass(
     val name: String,
     val exercises: MutableList<Pair<Exercise, Long>> = mutableListOf(),
     var totalTime: Long,
-    val imageUri: Uri? = null,
+    var imageUri: Uri? = null,
     val createdBy: String? = null,
 ): Parcelable {
     companion object {
