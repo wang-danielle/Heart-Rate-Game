@@ -77,7 +77,9 @@ class CustomLevelFragment : Fragment() {
         })
 
         binding.createButton.setOnClickListener {
-
+            sharedViewModel.saveLevel(binding.levelNameEditText.text.toString())
+            view?.findNavController()?.popBackStack()
+            sharedViewModel.resetLevel()
         }
 
         return binding.root

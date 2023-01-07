@@ -7,8 +7,11 @@ import androidx.room.Query
 @Dao
 interface LevelDao {
     @Insert
-    fun insert(level: LevelEntity)
+    suspend fun insert(level: LevelEntity)
 
     @Query("SELECT * FROM level_data_table")
-    fun getAll(): List<LevelEntity>
+    suspend fun getAll(): List<LevelEntity>
+
+    @Query("DELETE FROM level_data_table")
+    suspend fun clear()
 }

@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.heartrategame.models.Exercise
 import com.example.heartrategame.models.LevelDataClass
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class SharedCustomLevelViewModel(
-    private val database: LevelDatabase,
+    val database: LevelDatabase,
 ): ViewModel() {
     private val _levelData = MutableLiveData(LevelDataClass(name = "", totalTime = 0))
     val levelData: LiveData<LevelDataClass>
@@ -24,6 +26,16 @@ class SharedCustomLevelViewModel(
 
     fun setImage(imageUri: Uri?) {
         _levelData.value?.imageUri = imageUri
+    }
+
+    fun saveLevel(name: String) {
+        _levelData.value?.let {
+            it.name = name
+            GlobalScope.launch {
+                val levelEntity = LevelEntity(levelData = it)
+                database.levelDao.insert(levelEntity)
+            }
+        }
     }
 
     class Factory(private val database: LevelDatabase): ViewModelProvider.Factory {

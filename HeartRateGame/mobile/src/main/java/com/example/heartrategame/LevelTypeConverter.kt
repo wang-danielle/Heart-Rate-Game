@@ -6,7 +6,6 @@ import com.example.heartrategame.models.LevelDataClass
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-@ProvidedTypeConverter
 class LevelTypeConverter {
     @TypeConverter
     fun fromLevelData(levelData: LevelDataClass): String {

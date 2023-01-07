@@ -6,12 +6,19 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class LevelDataClass(
-    val name: String,
+    var name: String,
     val exercises: MutableList<Pair<Exercise, Long>> = mutableListOf(),
     var totalTime: Long,
-    var imageUri: Uri? = null,
+    var imageUriPath: String? = null,
     val createdBy: String? = null,
 ): Parcelable {
+    var imageUri: Uri?
+        get() = imageUriPath?.let {
+            Uri.parse(it)
+        }
+        set(value) {
+            imageUriPath = value?.toString()
+        }
     companion object {
         fun getBaseLevels(): List<LevelDataClass> {
             return Exercise.values().map {
