@@ -1,13 +1,15 @@
 package com.example.heartrategame
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.heartrategame.models.Exercise
 import com.example.heartrategame.models.LevelDataClass
 
-class SharedCustomLevelViewModel: ViewModel() {
+class SharedCustomLevelViewModel(
+    private val database: LevelDatabase,
+): ViewModel() {
     private val _levelData = MutableLiveData(LevelDataClass(name = "", totalTime = 0))
     val levelData: LiveData<LevelDataClass>
         get() = _levelData
@@ -22,5 +24,12 @@ class SharedCustomLevelViewModel: ViewModel() {
 
     fun setImage(imageUri: Uri?) {
         _levelData.value?.imageUri = imageUri
+    }
+
+    class Factory(private val database: LevelDatabase): ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return modelClass.getConstructor(LevelDatabase::class.java)
+                .newInstance(database)
+        }
     }
 }

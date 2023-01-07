@@ -42,7 +42,11 @@ class CustomLevelFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this).get(CustomLevelViewModel::class.java)
-        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedCustomLevelViewModel::class.java)
+        val application = requireNotNull(context as MainActivity).application
+        val database = LevelDatabase.getInstance(application)
+        val factory = SharedCustomLevelViewModel.Factory(database)
+        sharedViewModel = ViewModelProvider(requireActivity(), factory).get(SharedCustomLevelViewModel::class.java)
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_custom_level, container, false)
 
         binding.backButton.setOnClickListener {
@@ -71,6 +75,10 @@ class CustomLevelFragment : Fragment() {
             viewModel.exercises = levelData.exercises
             viewModel.listenForExercises(context)
         })
+
+        binding.createButton.setOnClickListener {
+
+        }
 
         return binding.root
     }
