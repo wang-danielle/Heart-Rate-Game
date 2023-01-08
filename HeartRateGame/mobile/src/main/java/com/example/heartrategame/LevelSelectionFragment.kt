@@ -39,6 +39,9 @@ class LevelSelectionFragment : Fragment() {
                 viewModel.resetUpdate()
             }
         })
+        viewModel.levels.observe(viewLifecycleOwner, Observer {
+            viewModel.listenForLevels(context)
+        })
 
         return binding.root
     }

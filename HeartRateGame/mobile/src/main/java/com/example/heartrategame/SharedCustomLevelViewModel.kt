@@ -17,7 +17,7 @@ class SharedCustomLevelViewModel(
         get() = _levelData
 
     fun resetLevel() {
-        _levelData.value = LevelDataClass(name = "", totalTime = 0)
+        _levelData.value = LevelDataClass(name = "", totalTime = 0, createdBy = "")
     }
 
     fun addExercise(exercise: Exercise, time: Long) {

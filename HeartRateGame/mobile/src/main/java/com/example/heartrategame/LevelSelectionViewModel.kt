@@ -3,6 +3,7 @@ package com.example.heartrategame
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.heartrategame.models.LevelDataClass
@@ -12,26 +13,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class LevelSelectionViewModel(
-    val roomDatabase: LevelDatabase
+    private val roomDatabase: LevelDatabase
 ) : ViewModel() {
     private val database = FirebaseDatabase.getInstance()
     private val storageRef = FirebaseStorage.getInstance().getReference()
     var levelItemAdapter: LevelItemAdapter? = null
-
-    private val _levelsUpdate = MutableLiveData<Boolean?>()
+    var levels: LiveData<List<LevelEntity>> = roomDatabase.levelDao.getAllLive()
+    private var _levelsUpdate = MutableLiveData<Boolean?>()
     val levelsUpdate: LiveData<Boolean?>
         get() = _levelsUpdate
 
     fun listenForLevels(context: Context?, username: String? = null) {
-        val levels = LevelDataClass.getBaseLevels()
-        levelItemAdapter = context?.let {
-            LevelItemAdapter(
-                context = it,
-                levels = levels
-            )
-        }
-        _levelsUpdate.value = true
-
         GlobalScope.launch {
             val levels = LevelDataClass.getBaseLevels() + roomDatabase.levelDao.getAll().map { it.levelData }
 
