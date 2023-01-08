@@ -48,7 +48,16 @@ class LevelItemAdapter(val context: Context, val levels: List<LevelDataClass>): 
         
         holder.itemView.setOnClickListener {
             val level = levels[position]
-            val directions = LevelSelectionFragmentDirections.actionLevelSelectionFragmentToTimeSelectionFragment(level)
+            val directions =
+                if (level.createdBy == null) {
+                    LevelSelectionFragmentDirections.actionLevelSelectionFragmentToTimeSelectionFragment(
+                        level
+                    )
+                } else {
+                    LevelSelectionFragmentDirections.actionLevelSelectionFragmentToGameFragment(
+                        level
+                    )
+                }
             Navigation.findNavController(it).navigate(directions)
         }
     }

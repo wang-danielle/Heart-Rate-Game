@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_levelSelectionFragment_to_customLevelFragment"
             app:destination="@id/customLevelFragment" />
+        <action
+            android:id="@+id/action_levelSelectionFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
     </fragment>
     <fragment
         android:id="@+id/timeSelectionFragment"

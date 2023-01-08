@@ -36,34 +36,19 @@ class TimeSelectionFragment : Fragment() {
 
         val args: TimeSelectionFragmentArgs by navArgs()
         val levelData = args.levelData
-        if (levelData.createdBy == null) {
-            binding.minutesPicker.maxValue = 59
-            binding.secondsPicker.maxValue = 59
-        } else {
-            binding.timeSetDialog.visibility = GONE
-        }
+        binding.minutesPicker.maxValue = 59
+        binding.secondsPicker.maxValue = 59
         binding.levelName.text = levelData.name
-        if (levelData.createdBy == null) {
-            binding.levelImage.setImageResource(levelData.exercises[0].first.imageResource)
-        } else if (levelData.imageUri == null) {
-            binding.levelImage.setImageResource(R.drawable.combo)
-        } else {
-            Glide
-                .with(this)
-                .load(levelData.imageUri)
-                .into(binding.levelImage)
-        }
+        binding.levelImage.setImageResource(levelData.exercises[0].first.imageResource)
 
         binding.startButton.setOnClickListener {
-            if (levelData.createdBy == null) {
-                val minutes = binding.minutesPicker.value
-                val seconds = binding.secondsPicker.value
-                val totalTime = (minutes*60 + seconds).toLong()
-                val exercise = levelData.exercises[0].first
-                levelData.exercises.removeAt(0)
-                levelData.exercises.add(Pair(exercise, totalTime))
-                levelData.totalTime = totalTime
-            }
+            val minutes = binding.minutesPicker.value
+            val seconds = binding.secondsPicker.value
+            val totalTime = (minutes*60 + seconds).toLong()
+            val exercise = levelData.exercises[0].first
+            levelData.exercises.removeAt(0)
+            levelData.exercises.add(Pair(exercise, totalTime))
+            levelData.totalTime = totalTime
 
             val directions = TimeSelectionFragmentDirections.actionTimeSelectionFragmentToGameFragment(levelData)
             Navigation.findNavController(it).navigate(directions)
