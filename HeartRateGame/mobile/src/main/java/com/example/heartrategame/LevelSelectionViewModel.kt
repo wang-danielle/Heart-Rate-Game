@@ -4,11 +4,16 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.heartrategame.models.LevelDataClass
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class LevelSelectionViewModel : ViewModel() {
+class LevelSelectionViewModel(
+    val roomDatabase: LevelDatabase
+) : ViewModel() {
     private val database = FirebaseDatabase.getInstance()
     private val storageRef = FirebaseStorage.getInstance().getReference()
     var levelItemAdapter: LevelItemAdapter? = null
@@ -18,17 +23,29 @@ class LevelSelectionViewModel : ViewModel() {
         get() = _levelsUpdate
 
     fun listenForLevels(context: Context?, username: String? = null) {
-        val levelsRef = database.getReference("levels")
-
-        // Allows base levels to be loaded even when there is no network
+        val levels = LevelDataClass.getBaseLevels()
         levelItemAdapter = context?.let {
             LevelItemAdapter(
                 context = it,
-                levels = LevelDataClass.getBaseLevels()
+                levels = levels
             )
         }
         _levelsUpdate.value = true
 
+        GlobalScope.launch {
+            val levels = LevelDataClass.getBaseLevels() + roomDatabase.levelDao.getAll().map { it.levelData }
+
+            // Allows base and locally saved levels to be loaded even when there is no network
+            levelItemAdapter = context?.let {
+                LevelItemAdapter(
+                    context = it,
+                    levels = levels
+                )
+            }
+            _levelsUpdate.postValue(true)
+        }
+
+//        val levelsRef = database.getReference("levels")
 //        levelsRef.addListenerForSingleValueEvent(object: ValueEventListener {
 //            override fun onDataChange(snapshot: DataSnapshot) {
 //                _levelsUpdate.value = false
@@ -63,5 +80,12 @@ class LevelSelectionViewModel : ViewModel() {
 
     fun resetUpdate() {
         _levelsUpdate.value = false
+    }
+
+    class Factory(private val database: LevelDatabase): ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return modelClass.getConstructor(LevelDatabase::class.java)
+                .newInstance(database)
+        }
     }
 }

@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class SharedCustomLevelViewModel(
     val database: LevelDatabase,
 ): ViewModel() {
-    private val _levelData = MutableLiveData(LevelDataClass(name = "", totalTime = 0))
+    private val _levelData = MutableLiveData(LevelDataClass(name = "", totalTime = 0, createdBy = ""))
     val levelData: LiveData<LevelDataClass>
         get() = _levelData
 
@@ -31,6 +31,11 @@ class SharedCustomLevelViewModel(
     fun saveLevel(name: String) {
         _levelData.value?.let {
             it.name = name
+            var totalTime = 0L
+            it.exercises.forEach { pair ->
+                totalTime += pair.second
+            }
+            it.totalTime = totalTime
             GlobalScope.launch {
                 val levelEntity = LevelEntity(levelData = it)
                 database.levelDao.insert(levelEntity)

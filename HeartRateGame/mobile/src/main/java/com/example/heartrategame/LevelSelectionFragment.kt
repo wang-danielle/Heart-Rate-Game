@@ -25,7 +25,10 @@ class LevelSelectionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(LevelSelectionViewModel::class.java)
+        val application = requireNotNull(context as MainActivity).application
+        val database = LevelDatabase.getInstance(application)
+        val factory = LevelSelectionViewModel.Factory(database)
+        viewModel = ViewModelProvider(this, factory).get(LevelSelectionViewModel::class.java)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_level_selection, container, false)
 
         binding.levelRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
