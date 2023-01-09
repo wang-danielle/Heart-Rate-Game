@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.heartrategame.databinding.FragmentResultsBinding
@@ -30,6 +31,9 @@ class ResultsFragment : Fragment() {
         binding.backButton.setOnClickListener {
             view?.findNavController()?.popBackStack(R.id.levelSelectionFragment, false)
         }
+        binding.quitButton.setOnClickListener {
+            view?.findNavController()?.popBackStack(R.id.levelSelectionFragment, false)
+        }
 
         val args: ResultsFragmentArgs by navArgs()
         val scores = args.scores
@@ -39,13 +43,17 @@ class ResultsFragment : Fragment() {
         binding.maxHrTextView.text = "MAX: ${scores.maxHeartrate} bpm"
         binding.avgHrTextView.text = "AVG: ${scores.avgHeartrate} bpm"
 
+        val application = requireNotNull(context as MainActivity).application
+        val database = ScoreDatabase.getInstance(application)
+        val factory = ResultsViewModel.Factory(database, args.levelId)
+        viewModel = ViewModelProvider(this, factory).get(ResultsViewModel::class.java)
+        viewModel.bestScore.observe(viewLifecycleOwner, Observer {
+            binding.newBestScoreLabel.visibility =
+                if (viewModel.isNewBestScore) View.VISIBLE else View.GONE
+            binding.bestScoreTextView.text = it.toString()
+        })
+        viewModel.fetchAndUpdateBestScore(scores.totalScore)
+
         return binding.root
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ResultsViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
 }

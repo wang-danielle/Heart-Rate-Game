@@ -47,6 +47,7 @@ class GameFragment : Fragment() {
         val args: GameFragmentArgs by navArgs()
         val levelData = args.levelData
         viewModel.level = levelData
+        viewModel.levelId = args.levelId
 
         totalTime = levelData.totalTime
         binding.timeLeftTextView.text = viewModel.formatTime(totalTime * viewModel.MILLIS_PER_SEC)
@@ -86,13 +87,16 @@ class GameFragment : Fragment() {
             }
 
             override fun onFinish() {
-                viewModel.sendResultsToWear()
                 val scores = ScoreDataClass(
                     minHeartrate = viewModel.minHeartRate.value ?: -1,
                     maxHeartrate = viewModel.maxHeartRate.value ?: -1,
                     avgHeartrate = viewModel.avgHeartRate.value ?: -1.0
                 )
-                val directions = GameFragmentDirections.actionGameFragmentToResultsFragment(scores)
+                viewModel.sendResultsToWear(scores.totalScore)
+                val directions = GameFragmentDirections.actionGameFragmentToResultsFragment(
+                    scores,
+                    viewModel.levelId
+                )
                 view?.findNavController()?.navigate(directions)
             }
         }.start()

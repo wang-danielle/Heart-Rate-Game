@@ -24,8 +24,14 @@ class LevelSelectionViewModel(
         get() = _levelsUpdate
 
     fun listenForLevels(context: Context?, username: String? = null) {
+        // TODO: take levels as param and use them if not null (for LiveData call)
         GlobalScope.launch {
-            val levels = LevelDataClass.getBaseLevels() + roomDatabase.levelDao.getAll().map { it.levelData }
+            val levels = LevelDataClass.getBaseLevels().map {
+                LevelEntity(
+                    id = -(it.exercises[0].first.ordinal).toLong(),
+                    levelData = it
+                )
+            } + roomDatabase.levelDao.getAll()
 
             // Allows base and locally saved levels to be loaded even when there is no network
             levelItemAdapter = context?.let {

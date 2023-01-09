@@ -83,16 +83,31 @@
                 android:textColor="@color/black"
                 android:gravity="center"/>
         </LinearLayout>
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:textColor="@color/black"
-            android:textSize="25sp"
-            android:text="Best Score: "
-            android:gravity="center"
-            />
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:text="Best Score: "
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/best_score_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:gravity="center"
+                />
+        </LinearLayout>
         <TextView
+            android:id="@+id/new_best_score_label"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5"
@@ -102,7 +117,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2.5"/>
+            android:layout_weight="3.5"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"

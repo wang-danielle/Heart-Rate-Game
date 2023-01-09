@@ -60,7 +60,10 @@ class TimeSelectionFragment : Fragment() {
             levelData.exercises.add(Pair(exercise, totalTime))
             levelData.totalTime = totalTime
 
-            val directions = TimeSelectionFragmentDirections.actionTimeSelectionFragmentToGameFragment(levelData)
+            val directions = TimeSelectionFragmentDirections.actionTimeSelectionFragmentToGameFragment(
+                levelData,
+                -exercise.ordinal.toLong()
+            )
             Navigation.findNavController(it).navigate(directions)
         }
 

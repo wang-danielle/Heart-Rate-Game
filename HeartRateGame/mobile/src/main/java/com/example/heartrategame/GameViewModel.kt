@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.heartrategame.models.Exercise
 import com.example.heartrategame.models.LevelDataClass
+import com.example.heartrategame.models.ScoreDataClass
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
@@ -14,6 +15,7 @@ import java.math.RoundingMode
 class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     lateinit var dataClient: DataClient
     lateinit var level: LevelDataClass // TODO: factory instead of lateinit
+    var levelId = -1L
     val MILLIS_PER_SEC = 1000L
     private var exerciseIndex = 0
     private var nextExerciseTime = -1L
@@ -96,10 +98,9 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
         dataClient.putDataItem(request)
     }
 
-    fun sendResultsToWear() {
+    fun sendResultsToWear(score: Double) {
         val request = PutDataMapRequest.create("/resultsRequest").run {
             dataMap.putLong("now", System.currentTimeMillis())
-            val score = maxHeartRate.value!! + minHeartRate.value!! + avgHeartRate.value!!
             dataMap.putDouble("score", score)
             asPutDataRequest()
         }
@@ -124,7 +125,7 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
                 if (hr > (_maxHeartRate.value ?: 0)) {
                     _maxHeartRate.value = hr
                 }
-                if (hr < (_minHeartRate.value ?: Int.MAX_VALUE)) {
+                if (hr != 0 && hr < (_minHeartRate.value ?: Int.MAX_VALUE)) {
                     _minHeartRate.value = hr
                 }
                 _avgHeartRate.value = computeAvgHeartRate(hr)

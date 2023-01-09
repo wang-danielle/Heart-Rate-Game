@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.heartrategame.models.LevelDataClass
 
-class LevelItemAdapter(val context: Context, val levels: List<LevelDataClass>): RecyclerView.Adapter<LevelItemAdapter.ViewHolder>() {
+class LevelItemAdapter(val context: Context, val levels: List<LevelEntity>): RecyclerView.Adapter<LevelItemAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.level_row, parent, false)
         val height = parent.measuredHeight / 7
@@ -33,7 +33,7 @@ class LevelItemAdapter(val context: Context, val levels: List<LevelDataClass>): 
             return
         }
 
-        val level = levels[position]
+        val level = levels[position].levelData
         holder.levelName.text = level.name
         if (level.createdBy == null) {
             holder.levelImage.setImageResource(level.exercises[0].first.imageResource)
@@ -47,7 +47,8 @@ class LevelItemAdapter(val context: Context, val levels: List<LevelDataClass>): 
         }
         
         holder.itemView.setOnClickListener {
-            val level = levels[position]
+            val levelEntity = levels[position]
+            val level = levelEntity.levelData
             val directions =
                 if (level.createdBy == null) {
                     LevelSelectionFragmentDirections.actionLevelSelectionFragmentToTimeSelectionFragment(
@@ -55,7 +56,8 @@ class LevelItemAdapter(val context: Context, val levels: List<LevelDataClass>): 
                     )
                 } else {
                     LevelSelectionFragmentDirections.actionLevelSelectionFragmentToGameFragment(
-                        level
+                        level,
+                        levelEntity.id
                     )
                 }
             Navigation.findNavController(it).navigate(directions)
