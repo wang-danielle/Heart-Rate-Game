@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -45,6 +46,15 @@ class TimeSelectionFragment : Fragment() {
             val minutes = binding.minutesPicker.value
             val seconds = binding.secondsPicker.value
             val totalTime = (minutes*60 + seconds).toLong()
+            if (totalTime <= 10L) {
+                Toast.makeText(
+                    context,
+                    "Choose a longer duration for this exercise!",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+
             val exercise = levelData.exercises[0].first
             levelData.exercises.removeAt(0)
             levelData.exercises.add(Pair(exercise, totalTime))
