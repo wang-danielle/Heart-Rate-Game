@@ -41,8 +41,8 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
         _currentExercise.value = level.exercises[exerciseIndex].first
 
         val request = PutDataMapRequest.create("/newExerciseRequest").run {
-            val timeLeftText = formatTime(level.totalTime * MILLIS_PER_SEC)
-            dataMap.putString("timeLeft", timeLeftText)
+            val timestamp = System.currentTimeMillis()
+            dataMap.putLong("timestamp", timestamp)
 
             dataMap.putInt("newExercise", _currentExercise.value!!.ordinal)
             asPutDataRequest()
@@ -51,10 +51,20 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
         dataClient.putDataItem(request)
     }
 
-    fun setNextExercise() {
+    private fun setNextExercise() {
         exerciseIndex++
         nextExerciseTime -= level.exercises[exerciseIndex].second
         _currentExercise.value = level.exercises[exerciseIndex].first
+
+        val request = PutDataMapRequest.create("/newExerciseRequest").run {
+            val timestamp = System.currentTimeMillis()
+            dataMap.putLong("timestamp", timestamp)
+
+            dataMap.putInt("newExercise", _currentExercise.value!!.ordinal)
+            asPutDataRequest()
+        }
+        request.setUrgent()
+        dataClient.putDataItem(request)
     }
 
     fun sendTimeToWear(msLeft: Long) {

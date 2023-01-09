@@ -1,23 +1,26 @@
 package com.example.heartrategame
 
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.os.Build
-import android.os.Bundle
+import android.os.*
+import android.support.wearable.activity.WearableActivity
+import android.view.WindowManager
 import androidx.core.content.res.ResourcesCompat
 import com.example.heartrategame.databinding.ActivityMainBinding
 import com.example.heartrategame.models.Exercise
 import com.google.android.gms.wearable.*
 
-class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedListener {
+class MainActivity : WearableActivity(), SensorEventListener, DataClient.OnDataChangedListener {
 
     private lateinit var binding: ActivityMainBinding
     private var heartRate = 0
+    private lateinit var vibrator: Vibrator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +37,16 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
                 SensorManager.SENSOR_DELAY_UI)
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            vibrator = vibratorManager.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
     }
 
     override fun onResume() {
@@ -95,6 +105,7 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
         binding.parentView.setBackgroundColor(
             ResourcesCompat.getColor(resources, R.color.pink_600, null)
         )
+        vibrator.vibrate(500)
     }
 
     private fun displayHome() {
