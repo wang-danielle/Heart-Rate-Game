@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.heartrategame.databinding.FragmentGameBinding
+import com.example.heartrategame.models.ScoreDataClass
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.Wearable.getDataClient
 
@@ -86,7 +87,13 @@ class GameFragment : Fragment() {
 
             override fun onFinish() {
                 viewModel.sendResultsToWear()
-                view?.findNavController()?.navigate(R.id.action_gameFragment_to_resultsFragment)
+                val scores = ScoreDataClass(
+                    minHeartrate = viewModel.minHeartRate.value ?: -1,
+                    maxHeartrate = viewModel.maxHeartRate.value ?: -1,
+                    avgHeartrate = viewModel.avgHeartRate.value ?: -1.0
+                )
+                val directions = GameFragmentDirections.actionGameFragmentToResultsFragment(scores)
+                view?.findNavController()?.navigate(directions)
             }
         }.start()
     }

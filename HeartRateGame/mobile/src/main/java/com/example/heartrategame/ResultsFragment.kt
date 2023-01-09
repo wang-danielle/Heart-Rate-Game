@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.heartrategame.databinding.FragmentResultsBinding
 
 class ResultsFragment : Fragment() {
@@ -29,6 +30,14 @@ class ResultsFragment : Fragment() {
         binding.backButton.setOnClickListener {
             view?.findNavController()?.popBackStack(R.id.levelSelectionFragment, false)
         }
+
+        val args: ResultsFragmentArgs by navArgs()
+        val scores = args.scores
+
+        binding.scoreTextView.text = scores.totalScore.toString()
+        binding.minHrTextView.text = "MIN: ${scores.minHeartrate} bpm"
+        binding.maxHrTextView.text = "MAX: ${scores.maxHeartrate} bpm"
+        binding.avgHrTextView.text = "AVG: ${scores.avgHeartrate} bpm"
 
         return binding.root
     }
