@@ -99,7 +99,8 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     fun sendResultsToWear() {
         val request = PutDataMapRequest.create("/resultsRequest").run {
             dataMap.putLong("now", System.currentTimeMillis())
-            dataMap.putInt("score", 123) // TODO: temp score, replace when score implemented
+            val score = maxHeartRate.value!! + minHeartRate.value!! + avgHeartRate.value!!
+            dataMap.putDouble("score", score)
             asPutDataRequest()
         }
         request.setUrgent()

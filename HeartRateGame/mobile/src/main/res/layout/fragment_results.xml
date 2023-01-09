@@ -46,7 +46,7 @@
             android:id="@+id/score_text_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:gravity="center"
@@ -102,7 +102,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.5"/>
+            android:layout_weight="2.5"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"

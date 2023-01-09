@@ -91,7 +91,7 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
             .forEach { event ->
                 val score = DataMapItem.fromDataItem(event.dataItem)
                     .dataMap
-                    .getInt("score")
+                    .getDouble("score")
                 displayResults(score)
             }
     }
@@ -116,9 +116,9 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
         )
     }
 
-    private fun displayResults(score: Int) {
+    private fun displayResults(score: Double) {
         binding.topTextView.text = "Results"
-        binding.bottomTextView.text = "Score: ${score.toString()}"
+        binding.bottomTextView.text = "Score: $score"
         binding.image.setImageResource(R.drawable.ic_logo)
         binding.image.clearColorFilter()
         binding.parentView.setBackgroundColor(
