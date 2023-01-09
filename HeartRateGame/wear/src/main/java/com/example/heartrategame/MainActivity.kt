@@ -9,14 +9,12 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.*
-import android.support.wearable.activity.WearableActivity
-import android.view.WindowManager
 import androidx.core.content.res.ResourcesCompat
 import com.example.heartrategame.databinding.ActivityMainBinding
 import com.example.heartrategame.models.Exercise
 import com.google.android.gms.wearable.*
 
-class MainActivity : WearableActivity(), SensorEventListener, DataClient.OnDataChangedListener {
+class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedListener {
 
     private lateinit var binding: ActivityMainBinding
     private var heartRate = 0
