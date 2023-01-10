@@ -72,11 +72,6 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
             }
         dataEvents.filter { it.dataItem.uri.path == "/newExerciseRequest" }
             .forEach { event ->
-                val timeLeft = DataMapItem.fromDataItem(event.dataItem)
-                    .dataMap
-                    .getString("timeLeft")
-                binding.bottomTextView.text = timeLeft
-
                 val newExercise = DataMapItem.fromDataItem(event.dataItem)
                     .dataMap
                     .getInt("newExercise")
@@ -103,7 +98,7 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
         binding.parentView.setBackgroundColor(
             ResourcesCompat.getColor(resources, R.color.pink_600, null)
         )
-        vibrator.vibrate(500)
+        vibrator.vibrate(250)
     }
 
     private fun displayHome() {
@@ -138,6 +133,9 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
     private fun sendHRToMobile() {
         val dataClient: DataClient = Wearable.getDataClient(this)
         val request = PutDataMapRequest.create("/heartRate").run {
+            val timestamp = System.currentTimeMillis()
+            dataMap.putLong("timestamp", timestamp)
+
             dataMap.putInt("heartRate", heartRate)
             asPutDataRequest()
         }

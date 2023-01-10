@@ -48,10 +48,10 @@ class CustomLevelTimeSelectionFragment : Fragment() {
             val minutes = binding.minutesPicker.value
             val seconds = binding.secondsPicker.value
             val totalTime = (minutes*60 + seconds).toLong()
-            if (totalTime <= 10L) {
+            if (totalTime < 10L) {
                 Toast.makeText(
                     context,
-                    "Choose a longer duration for this exercise!",
+                    "Choose a longer duration for this exercise! (at least 10s)",
                     Toast.LENGTH_SHORT
                 ).show()
                 return@setOnClickListener

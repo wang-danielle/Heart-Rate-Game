@@ -91,7 +91,7 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
 
     fun sendQuitToWear() {
         val request = PutDataMapRequest.create("/quitRequest").run {
-            dataMap.putLong("now", System.currentTimeMillis())
+            dataMap.putLong("timestamp", System.currentTimeMillis())
             asPutDataRequest()
         }
         request.setUrgent()
@@ -100,7 +100,7 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
 
     fun sendResultsToWear(score: Double) {
         val request = PutDataMapRequest.create("/resultsRequest").run {
-            dataMap.putLong("now", System.currentTimeMillis())
+            dataMap.putLong("timestamp", System.currentTimeMillis())
             dataMap.putDouble("score", score)
             asPutDataRequest()
         }
