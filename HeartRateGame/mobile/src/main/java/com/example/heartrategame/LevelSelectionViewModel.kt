@@ -9,33 +9,41 @@ import com.example.heartrategame.adapters.LevelItemAdapter
 import com.example.heartrategame.models.LevelDataClass
 import com.example.heartrategame.room.LevelDatabase
 import com.example.heartrategame.room.LevelEntity
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class LevelSelectionViewModel(
     private val roomDatabase: LevelDatabase
 ) : ViewModel() {
-    private val database = FirebaseDatabase.getInstance()
-    private val storageRef = FirebaseStorage.getInstance().getReference()
     var levelItemAdapter: LevelItemAdapter? = null
     var levels: LiveData<List<LevelEntity>> = roomDatabase.levelDao.getAllLive()
     private var _levelsUpdate = MutableLiveData<Boolean?>()
     val levelsUpdate: LiveData<Boolean?>
         get() = _levelsUpdate
 
-    fun listenForLevels(context: Context?, username: String? = null) {
-        // TODO: take levels as param and use them if not null (for LiveData call)
-        GlobalScope.launch {
-            val levels = LevelDataClass.getBaseLevels().map {
-                LevelEntity(
-                    id = -(it.exercises[0].first.ordinal).toLong(),
-                    levelData = it
-                )
-            } + roomDatabase.levelDao.getAll()
+    fun listenForLevels(context: Context?, loadedLevels: List<LevelEntity>? = null) {
+        val baseLevels = LevelDataClass.getBaseLevels().map {
+            LevelEntity(
+                id = -(it.exercises[0].first.ordinal).toLong(),
+                levelData = it
+            )
+        }
+        if (loadedLevels != null) {
+            // Used when LevelDao.getAllLive is triggered to avoid requerying
+            val levels = baseLevels + loadedLevels
 
-            // Allows base and locally saved levels to be loaded even when there is no network
+            levelItemAdapter = context?.let {
+                LevelItemAdapter(
+                    context = it,
+                    levels = levels
+                )
+            }
+            _levelsUpdate.postValue(true)
+            return
+        }
+        GlobalScope.launch {
+            val levels = baseLevels + roomDatabase.levelDao.getAll()
+
             levelItemAdapter = context?.let {
                 LevelItemAdapter(
                     context = it,
@@ -44,38 +52,6 @@ class LevelSelectionViewModel(
             }
             _levelsUpdate.postValue(true)
         }
-
-//        val levelsRef = database.getReference("levels")
-//        levelsRef.addListenerForSingleValueEvent(object: ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                _levelsUpdate.value = false
-//                val customLevels = ArrayList<LevelDataClass>()
-//                for (level in snapshot.children) {
-//                    level.key?.let {
-//                        customLevels.add(
-//                            LevelDataClass(
-//                                name = it,
-//                                totalTime = 0, // TODO: fix
-//                                imageUri = Uri.parse(level.getValue(String::class.java)),
-//                                createdBy = null,
-//                            )
-//                        )
-//                    }
-//                }
-//                val levels = customLevels + LevelDataClass.getBaseLevels()
-//                itemAdapter = context?.let {
-//                    ItemAdapter(
-//                        context = it,
-//                        levels = levels
-//                    )
-//                }
-//                _levelsUpdate.value = true
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//
-//            }
-//        })
     }
 
     fun resetUpdate() {

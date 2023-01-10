@@ -13,7 +13,6 @@ import com.example.heartrategame.databinding.FragmentLevelSelectionBinding
 import com.example.heartrategame.room.LevelDatabase
 
 class LevelSelectionFragment : Fragment() {
-
     private lateinit var binding: FragmentLevelSelectionBinding
 
     companion object {
@@ -26,22 +25,22 @@ class LevelSelectionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_level_selection, container, false)
         val application = requireNotNull(context as MainActivity).application
         val database = LevelDatabase.getInstance(application)
         val factory = LevelSelectionViewModel.Factory(database)
         viewModel = ViewModelProvider(this, factory).get(LevelSelectionViewModel::class.java)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_level_selection, container, false)
 
         binding.levelRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        viewModel.listenForLevels(context)
         viewModel.levelsUpdate.observe(viewLifecycleOwner, Observer { activitiesUpdate ->
             if (activitiesUpdate == true) {
                 binding.levelRecyclerView.adapter = viewModel.levelItemAdapter
                 viewModel.resetUpdate()
             }
         })
-        viewModel.levels.observe(viewLifecycleOwner, Observer {
-            viewModel.listenForLevels(context)
+        viewModel.listenForLevels(context)
+        viewModel.levels.observe(viewLifecycleOwner, Observer { loadedLevels ->
+            viewModel.listenForLevels(context, loadedLevels)
         })
 
         return binding.root
