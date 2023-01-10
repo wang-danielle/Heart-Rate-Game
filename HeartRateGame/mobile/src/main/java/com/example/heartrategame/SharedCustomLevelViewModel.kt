@@ -2,10 +2,10 @@ package com.example.heartrategame
 
 import android.net.Uri
 import androidx.lifecycle.*
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.heartrategame.models.Exercise
 import com.example.heartrategame.models.LevelDataClass
+import com.example.heartrategame.room.LevelDatabase
+import com.example.heartrategame.room.LevelEntity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

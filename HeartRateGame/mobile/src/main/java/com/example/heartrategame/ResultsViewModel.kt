@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.heartrategame.room.ScoreDatabase
+import com.example.heartrategame.room.ScoreEntity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

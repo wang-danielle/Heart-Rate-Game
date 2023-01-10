@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.heartrategame.databinding.FragmentResultsBinding
+import com.example.heartrategame.room.ScoreDatabase
 
 class ResultsFragment : Fragment() {
 

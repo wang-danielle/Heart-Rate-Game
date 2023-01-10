@@ -1,4 +1,4 @@
-package com.example.heartrategame
+package com.example.heartrategame.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.heartrategame.ExerciseSelectionFragmentDirections
+import com.example.heartrategame.R
 import com.example.heartrategame.models.Exercise
 
 class ExerciseItemAdapter(val context: Context, val exercises: Array<Exercise>): RecyclerView.Adapter<ExerciseItemAdapter.ViewHolder>() {

@@ -14,10 +14,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.heartrategame.databinding.FragmentCustomLevelBinding
-import com.example.heartrategame.models.Exercise
+import com.example.heartrategame.room.LevelDatabase
 
 class CustomLevelFragment : Fragment() {
 

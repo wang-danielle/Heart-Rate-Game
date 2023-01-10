@@ -1,4 +1,4 @@
-package com.example.heartrategame
+package com.example.heartrategame.room
 
 import androidx.room.Dao
 import androidx.room.Insert

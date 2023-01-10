@@ -1,4 +1,4 @@
-package com.example.heartrategame
+package com.example.heartrategame.room
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter

@@ -1,9 +1,8 @@
 package com.example.heartrategame
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.heartrategame.adapters.ExerciseItemAdapter
 import com.example.heartrategame.models.Exercise
 
 class ExerciseSelectionViewModel : ViewModel() {

@@ -1,4 +1,4 @@
-package com.example.heartrategame
+package com.example.heartrategame.adapters
 
 import android.content.Context
 import android.graphics.Color
@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.example.heartrategame.R
 import com.example.heartrategame.models.Exercise
 
 class ExerciseTimeItemAdapter(val context: Context, val exercises: List<Pair<Exercise, Long?>>): RecyclerView.Adapter<ExerciseTimeItemAdapter.ViewHolder>() {

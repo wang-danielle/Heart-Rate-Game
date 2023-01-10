@@ -12,7 +12,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.example.heartrategame.databinding.FragmentGameBinding
 import com.example.heartrategame.models.ScoreDataClass
 import com.google.android.gms.wearable.Wearable

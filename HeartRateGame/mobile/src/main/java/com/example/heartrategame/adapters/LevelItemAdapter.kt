@@ -1,4 +1,4 @@
-package com.example.heartrategame
+package com.example.heartrategame.adapters
 
 import android.content.Context
 import android.graphics.Color
@@ -10,7 +10,9 @@ import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.heartrategame.models.LevelDataClass
+import com.example.heartrategame.LevelSelectionFragmentDirections
+import com.example.heartrategame.room.LevelEntity
+import com.example.heartrategame.R
 
 class LevelItemAdapter(val context: Context, val levels: List<LevelEntity>): RecyclerView.Adapter<LevelItemAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

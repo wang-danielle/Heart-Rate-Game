@@ -23,8 +23,6 @@ class TimeSelectionFragment : Fragment() {
         fun newInstance() = TimeSelectionFragment()
     }
 
-    private lateinit var viewModel: TimeSelectionViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
