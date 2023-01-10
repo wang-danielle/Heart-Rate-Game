@@ -46,6 +46,9 @@
         <argument
             android:name="levelId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_gameFragment_to_levelFailedFragment"
+            app:destination="@id/levelFailedFragment" />
     </fragment>
     <fragment
         android:id="@+id/resultsFragment"
@@ -85,5 +88,14 @@
         <argument
             android:name="exercise"
             app:argType="com.example.heartrategame.models.Exercise" />
+    </fragment>
+    <fragment
+        android:id="@+id/levelFailedFragment"
+        android:name="com.example.heartrategame.LevelFailedFragment"
+        android:label="fragment_level_failed"
+        tools:layout="@layout/fragment_level_failed" >
+        <argument
+            android:name="failReason"
+            app:argType="string" />
     </fragment>
 </navigation>

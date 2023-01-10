@@ -15,4 +15,7 @@
     <string name="back_button">Back Button</string>
     <string name="results_title">Results</string>
     <string name="add_custom_level_title">Add Custom Level</string>
+    <string name="level_failed">Level Failed</string>
+    <string name="back">Back</string>
+    <string name="keep_moving">⚠ KEEP MOVING! ⚠</string>
 </resources>

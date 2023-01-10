@@ -17,12 +17,13 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     lateinit var level: LevelDataClass // TODO: factory instead of lateinit
     var levelId = -1L
     val MILLIS_PER_SEC = 1000L
+
     private var exerciseIndex = 0
     private var nextExerciseTime = -1L
-
     private val _currentExercise = MutableLiveData<Exercise>()
     val currentExercise: LiveData<Exercise>
         get() = _currentExercise
+
     private val _heartRate = MutableLiveData<Int>()
     val heartRate: LiveData<Int>
         get() = _heartRate
@@ -35,7 +36,12 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     private val _avgHeartRate = MutableLiveData<Double>()
     val avgHeartRate: LiveData<Double>
         get() = _avgHeartRate
-    private var numHRReadings: Double = 0.0;
+    private var numHRReadings: Double = 0.0
+
+    private val _isMoving = MutableLiveData<Boolean>()
+    val isMoving: LiveData<Boolean>
+        get() = _isMoving
+    private var numTimesNotMoving = 0
 
     fun setFirstExercise() {
         exerciseIndex = 0
@@ -118,9 +124,8 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         dataEvents.filter { it.dataItem.uri.path == "/heartRate" }
             .forEach { event ->
-                val hr = DataMapItem.fromDataItem(event.dataItem)
-                    .dataMap
-                    .getInt("heartRate")
+                val dataMap = DataMapItem.fromDataItem(event.dataItem).dataMap
+                val hr = dataMap.getInt("heartRate")
                 _heartRate.value = hr
                 if (hr > (_maxHeartRate.value ?: 0)) {
                     _maxHeartRate.value = hr
@@ -129,6 +134,11 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
                     _minHeartRate.value = hr
                 }
                 _avgHeartRate.value = computeAvgHeartRate(hr)
+
+                val isMoving = dataMap.getBoolean("isMoving")
+                _isMoving.value = isMoving
+                if (!isMoving)
+                    numTimesNotMoving++
             }
     }
 
@@ -143,5 +153,17 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
         } ?: newHeartRate.toDouble()
         retVal = retVal.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
         return retVal
+    }
+
+    fun didReceiveHR(): Boolean {
+        return numHRReadings > 0
+                && minHeartRate.value != null && minHeartRate.value != Int.MAX_VALUE
+                && maxHeartRate.value != null && maxHeartRate.value != 0
+                && avgHeartRate.value != null
+    }
+
+    fun didMoveEnough(): Boolean {
+        if (numHRReadings == 0.0) return false
+        return (numTimesNotMoving / numHRReadings) <= 0.25
     }
 }

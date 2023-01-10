@@ -9,15 +9,21 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.*
+import android.util.Log
 import androidx.core.content.res.ResourcesCompat
 import com.example.heartrategame.databinding.ActivityMainBinding
 import com.example.heartrategame.models.Exercise
 import com.google.android.gms.wearable.*
+import java.lang.Math.sqrt
 
 class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedListener {
 
+    data class Vector(var x: Float, var y: Float, var z: Float)
+
     private lateinit var binding: ActivityMainBinding
     private var heartRate = 0
+    private var accelMagnitude = 0F
+    private var gravity = Vector(0F, 0F, 0F)
     private lateinit var vibrator: Vibrator
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +38,10 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
         val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)?.also { heartRate ->
             sensorManager.registerListener(this, heartRate,
+                SensorManager.SENSOR_DELAY_UI)
+        }
+        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also {
+            sensorManager.registerListener(this, it,
                 SensorManager.SENSOR_DELAY_UI)
         }
 
@@ -126,8 +136,28 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        val heartRateReceived = event!!.values[0].toInt()
-        heartRate = heartRateReceived
+        event?.let {
+            val sensor = it.sensor
+            when (sensor.type) {
+                Sensor.TYPE_ACCELEROMETER -> {
+                    val alpha = 0.8F
+
+                    gravity.x = alpha * gravity.x + (1 - alpha) * it.values[0]
+                    gravity.y = alpha * gravity.y + (1 - alpha) * it.values[1]
+                    gravity.z = alpha * gravity.z + (1 - alpha) * it.values[2]
+
+                    val x = it.values[0] - gravity.x
+                    val y = it.values[1] - gravity.y
+                    val z = it.values[2] - gravity.z
+                    accelMagnitude = kotlin.math.sqrt(x*x + y*y + z*z)
+                }
+                Sensor.TYPE_HEART_RATE -> {
+                    val heartRateReceived = it.values[0].toInt()
+                    heartRate = heartRateReceived
+                }
+            }
+            return@let
+        }
     }
 
     private fun sendHRToMobile() {
@@ -135,7 +165,7 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
         val request = PutDataMapRequest.create("/heartRate").run {
             val timestamp = System.currentTimeMillis()
             dataMap.putLong("timestamp", timestamp)
-
+            dataMap.putBoolean("isMoving", accelMagnitude >= 0.5F)
             dataMap.putInt("heartRate", heartRate)
             asPutDataRequest()
         }

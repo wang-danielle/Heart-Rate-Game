@@ -74,6 +74,13 @@ class GameFragment : Fragment() {
         })
         getDataClient(activity as MainActivity).addListener(viewModel)
 
+        viewModel.isMoving.observe(viewLifecycleOwner, Observer { isMoving ->
+            if (isMoving)
+                binding.keepMovingText.visibility = View.INVISIBLE
+            else
+                binding.keepMovingText.visibility = View.VISIBLE
+        })
+
         return binding.root
     }
 
@@ -87,10 +94,23 @@ class GameFragment : Fragment() {
             }
 
             override fun onFinish() {
+                if (!viewModel.didReceiveHR()) {
+                    val directions = GameFragmentDirections.actionGameFragmentToLevelFailedFragment(
+                        "Did not receive HR readings"
+                    )
+                    view?.findNavController()?.navigate(directions)
+                    return
+                } else if (!viewModel.didMoveEnough()) {
+                    val directions = GameFragmentDirections.actionGameFragmentToLevelFailedFragment(
+                        "You need to keep moving!"
+                    )
+                    view?.findNavController()?.navigate(directions)
+                    return
+                }
                 val scores = ScoreDataClass(
-                    minHeartrate = viewModel.minHeartRate.value ?: -1,
-                    maxHeartrate = viewModel.maxHeartRate.value ?: -1,
-                    avgHeartrate = viewModel.avgHeartRate.value ?: -1.0
+                    minHeartrate = viewModel.minHeartRate.value!!,
+                    maxHeartrate = viewModel.maxHeartRate.value!!,
+                    avgHeartrate = viewModel.avgHeartRate.value!!
                 )
                 viewModel.sendResultsToWear(scores.totalScore)
                 val directions = GameFragmentDirections.actionGameFragmentToResultsFragment(
