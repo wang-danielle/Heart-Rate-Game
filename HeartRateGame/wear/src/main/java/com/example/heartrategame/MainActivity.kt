@@ -9,12 +9,10 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.*
-import android.util.Log
 import androidx.core.content.res.ResourcesCompat
 import com.example.heartrategame.databinding.ActivityMainBinding
 import com.example.heartrategame.models.Exercise
 import com.google.android.gms.wearable.*
-import java.lang.Math.sqrt
 
 class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedListener {
 
@@ -25,6 +23,9 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
     private var accelMagnitude = 0F
     private var gravity = Vector(0F, 0F, 0F)
     private lateinit var vibrator: Vibrator
+    private lateinit var sensorManager: SensorManager
+    private var hrSensor: Sensor? = null
+    private var accelSensor: Sensor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,15 +36,9 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
             requestPermissions(arrayOf("android.permission.BODY_SENSORS"), 0)
         }
 
-        val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)?.also { heartRate ->
-            sensorManager.registerListener(this, heartRate,
-                SensorManager.SENSOR_DELAY_UI)
-        }
-        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also {
-            sensorManager.registerListener(this, it,
-                SensorManager.SENSOR_DELAY_UI)
-        }
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        hrSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)
+        accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
@@ -61,12 +56,17 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
         super.onResume()
 
         Wearable.getDataClient(this).addListener(this)
+        sensorManager.registerListener(this, hrSensor,
+            SensorManager.SENSOR_DELAY_UI)
+        sensorManager.registerListener(this, accelSensor,
+            SensorManager.SENSOR_DELAY_UI)
     }
 
     override fun onPause() {
         super.onPause()
 
         Wearable.getDataClient(this).removeListener(this)
+        sensorManager.unregisterListener(this)
     }
 
     override fun onDataChanged(dataEvents: DataEventBuffer) {
@@ -96,8 +96,10 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
             .forEach { event ->
                 val score = DataMapItem.fromDataItem(event.dataItem)
                     .dataMap
-                    .getDouble("score")
-                displayResults(score)
+                    .getString("score")
+                if (score != null) {
+                    displayResults(score)
+                }
             }
     }
 
@@ -121,9 +123,14 @@ class MainActivity : Activity(), SensorEventListener, DataClient.OnDataChangedLi
         )
     }
 
-    private fun displayResults(score: Double) {
+    private fun displayResults(score: String) {
         binding.topTextView.text = "Results"
-        binding.bottomTextView.text = "Score: $score"
+        if (score == "Failed") {
+            binding.bottomTextView.text = score
+        } else {
+            binding.bottomTextView.text = "Score: $score"
+        }
+
         binding.image.setImageResource(R.drawable.ic_logo)
         binding.image.clearColorFilter()
         binding.parentView.setBackgroundColor(

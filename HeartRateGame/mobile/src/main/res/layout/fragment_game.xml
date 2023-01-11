@@ -72,7 +72,7 @@ tools:context=".GameFragment">
             android:gravity="center">
             <TextView
                 android:id="@+id/bpm_text_view"
-                android:text="-"
+                android:text="@string/blank_hr"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/white"
@@ -94,7 +94,7 @@ tools:context=".GameFragment">
             android:gravity="center">
             <TextView
                 android:id="@+id/min_hr_text_view"
-                android:text="MIN: -"
+                android:text="@string/blank_min"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/white"
@@ -104,7 +104,7 @@ tools:context=".GameFragment">
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:id="@+id/max_hr_text_view"
-                android:text="MAX: -"
+                android:text="@string/blank_max"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/white"
@@ -112,7 +112,7 @@ tools:context=".GameFragment">
             <TextView
                 android:layout_marginStart="5dp"
                 android:id="@+id/avg_hr_text_view"
-                android:text="AVG: -"
+                android:text="@string/blank_avg"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/white"

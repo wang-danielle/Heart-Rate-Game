@@ -3,19 +3,20 @@ package com.example.heartrategame
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.heartrategame.models.Exercise
 import com.example.heartrategame.models.LevelDataClass
-import com.example.heartrategame.models.ScoreDataClass
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.PutDataMapRequest
 import java.math.RoundingMode
 
-class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
+class GameViewModel(
+    private val level: LevelDataClass,
+    val levelId: Long,
+) : ViewModel(), DataClient.OnDataChangedListener {
     lateinit var dataClient: DataClient
-    lateinit var level: LevelDataClass // TODO: factory instead of lateinit
-    var levelId = -1L
     val MILLIS_PER_SEC = 1000L
 
     private var exerciseIndex = 0
@@ -27,10 +28,10 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     private val _heartRate = MutableLiveData<Int>()
     val heartRate: LiveData<Int>
         get() = _heartRate
-    private val _maxHeartRate = MutableLiveData<Int>(0)
+    private val _maxHeartRate = MutableLiveData(0)
     val maxHeartRate: LiveData<Int>
         get() = _maxHeartRate
-    private val _minHeartRate = MutableLiveData<Int>(Int.MAX_VALUE)
+    private val _minHeartRate = MutableLiveData(Int.MAX_VALUE)
     val minHeartRate: LiveData<Int>
         get() = _minHeartRate
     private val _avgHeartRate = MutableLiveData<Double>()
@@ -104,10 +105,10 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
         dataClient.putDataItem(request)
     }
 
-    fun sendResultsToWear(score: Double) {
+    fun sendResultsToWear(score: String) {
         val request = PutDataMapRequest.create("/resultsRequest").run {
             dataMap.putLong("timestamp", System.currentTimeMillis())
-            dataMap.putDouble("score", score)
+            dataMap.putString("score", score)
             asPutDataRequest()
         }
         request.setUrgent()
@@ -142,6 +143,10 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
             }
     }
 
+    private fun round(num: Double): Double {
+        return num.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
+    }
+
     private fun computeAvgHeartRate(newHeartRate: Int): Double {
         numHRReadings++
         var retVal = _avgHeartRate.value?.let {
@@ -151,7 +156,7 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
                 it * ((numHRReadings - 1) / numHRReadings) + newHeartRate * (1 / numHRReadings)
             }
         } ?: newHeartRate.toDouble()
-        retVal = retVal.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
+        retVal = round(retVal)
         return retVal
     }
 
@@ -165,5 +170,15 @@ class GameViewModel : ViewModel(), DataClient.OnDataChangedListener {
     fun didMoveEnough(): Boolean {
         if (numHRReadings == 0.0) return false
         return (numTimesNotMoving / numHRReadings) <= 0.25
+    }
+
+    class Factory(
+        private val level: LevelDataClass,
+        private val levelId: Long
+    ): ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return GameViewModel(level, levelId) as T
+        }
     }
 }

@@ -32,9 +32,6 @@ class GameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
-        viewModel.dataClient = Wearable.getDataClient(activity as AppCompatActivity)
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_game, container, false)
 
         binding.quitButton.setOnClickListener {
@@ -45,8 +42,9 @@ class GameFragment : Fragment() {
 
         val args: GameFragmentArgs by navArgs()
         val levelData = args.levelData
-        viewModel.level = levelData
-        viewModel.levelId = args.levelId
+        val factory = GameViewModel.Factory(levelData, args.levelId)
+        viewModel = ViewModelProvider(this, factory).get(GameViewModel::class.java)
+        viewModel.dataClient = Wearable.getDataClient(activity as AppCompatActivity)
 
         totalTime = levelData.totalTime
         binding.timeLeftTextView.text = viewModel.formatTime(totalTime * viewModel.MILLIS_PER_SEC)
@@ -98,12 +96,14 @@ class GameFragment : Fragment() {
                         "Did not receive HR readings"
                     )
                     view?.findNavController()?.navigate(directions)
+                    viewModel.sendResultsToWear("Failed")
                     return
                 } else if (!viewModel.didMoveEnough()) {
                     val directions = GameFragmentDirections.actionGameFragmentToLevelFailedFragment(
                         "You need to keep moving!"
                     )
                     view?.findNavController()?.navigate(directions)
+                    viewModel.sendResultsToWear("Failed")
                     return
                 }
                 val scores = ScoreDataClass(
@@ -111,7 +111,7 @@ class GameFragment : Fragment() {
                     maxHeartrate = viewModel.maxHeartRate.value!!,
                     avgHeartrate = viewModel.avgHeartRate.value!!
                 )
-                viewModel.sendResultsToWear(scores.totalScore)
+                viewModel.sendResultsToWear(scores.totalScore.toString())
                 val directions = GameFragmentDirections.actionGameFragmentToResultsFragment(
                     scores,
                     viewModel.levelId

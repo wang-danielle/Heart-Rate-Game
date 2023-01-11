@@ -16,4 +16,11 @@
     <string name="level_failed">Level Failed</string>
     <string name="back">Back</string>
     <string name="keep_moving">⚠ KEEP MOVING! ⚠</string>
+    <string name="blank_hr">-</string>
+    <string name="blank_min">MIN: -</string>
+    <string name="blank_max">MAX: -</string>
+    <string name="blank_avg">AVG: -</string>
+    <string name="new_best_score">NEW BEST SCORE!</string>
+    <string name="best_score">Best Score:</string>
+    <string name="your_score">Your Score:</string>
 </resources>
