@@ -55,8 +55,12 @@ class LevelSelectionFragment : Fragment() {
             currentUser.photoUrl?.let {
                 Glide
                     .with(context as MainActivity)
-                    .load(currentUser.photoUrl)
+                    .load(it)
                     .into(binding.accountButton)
+            }
+            binding.accountButton.setOnClickListener {
+                Navigation.findNavController(it)
+                    .navigate(R.id.action_levelSelectionFragment_to_accountFragment)
             }
         }
 

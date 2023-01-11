@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         auth = Firebase.auth
-        auth.signOut()
 
         supportActionBar?.hide()
 
