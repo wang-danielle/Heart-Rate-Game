@@ -16,7 +16,7 @@ class ExerciseTimeItemAdapter(val context: Context, val exercises: List<Pair<Exe
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.level_row, parent, false)
         val height = (parent.parent as ViewGroup).measuredHeight / 7
-        itemView.layoutParams.height = height.toInt()
+        itemView.layoutParams.height = height
         return ViewHolder(
             itemView
         )
@@ -53,9 +53,9 @@ class ExerciseTimeItemAdapter(val context: Context, val exercises: List<Pair<Exe
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        var exerciseName = view.findViewById<TextView>(R.id.level_name)
-        var exerciseImage = view.findViewById<ImageView>(R.id.level_image)
-        var bottomLine = view.findViewById<View>(R.id.bottom_line)
-        var sideText = view.findViewById<TextView>(R.id.side_text)
+        var exerciseName: TextView = view.findViewById(R.id.level_name)
+        var exerciseImage: ImageView = view.findViewById(R.id.level_image)
+        var bottomLine: View = view.findViewById(R.id.bottom_line)
+        var sideText: TextView = view.findViewById(R.id.side_text)
     }
 }

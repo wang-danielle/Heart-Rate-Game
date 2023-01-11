@@ -35,7 +35,8 @@ class LevelItemAdapter(val context: Context, val levels: List<LevelEntity>): Rec
             return
         }
 
-        val level = levels[position].levelData
+        val levelEntity = levels[position]
+        val level = levelEntity.levelData
         holder.levelName.text = level.name
         if (level.createdBy == null) {
             holder.levelImage.setImageResource(level.exercises[0].first.imageResource)
@@ -49,8 +50,6 @@ class LevelItemAdapter(val context: Context, val levels: List<LevelEntity>): Rec
         }
         
         holder.itemView.setOnClickListener {
-            val levelEntity = levels[position]
-            val level = levelEntity.levelData
             val directions =
                 if (level.createdBy == null) {
                     LevelSelectionFragmentDirections.actionLevelSelectionFragmentToTimeSelectionFragment(
@@ -71,8 +70,8 @@ class LevelItemAdapter(val context: Context, val levels: List<LevelEntity>): Rec
     }
     
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        var levelName = view.findViewById<TextView>(R.id.level_name)
-        var levelImage = view.findViewById<ImageView>(R.id.level_image)
-        var bottomLine = view.findViewById<View>(R.id.bottom_line)
+        var levelName: TextView = view.findViewById(R.id.level_name)
+        var levelImage: ImageView = view.findViewById(R.id.level_image)
+        var bottomLine: View = view.findViewById(R.id.bottom_line)
     }
 }

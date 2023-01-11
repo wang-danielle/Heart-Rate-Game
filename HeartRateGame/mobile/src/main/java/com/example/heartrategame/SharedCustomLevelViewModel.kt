@@ -21,7 +21,7 @@ class SharedCustomLevelViewModel(
     }
 
     fun addExercise(exercise: Exercise, time: Long) {
-        _levelData.value?.exercises?.add(Pair<Exercise, Long>(exercise, time))
+        _levelData.value?.exercises?.add(Pair(exercise, time))
     }
 
     fun setImage(imageUri: Uri?) {

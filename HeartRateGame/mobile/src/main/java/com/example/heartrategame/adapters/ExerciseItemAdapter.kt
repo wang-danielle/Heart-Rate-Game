@@ -37,7 +37,7 @@ class ExerciseItemAdapter(val context: Context, val exercises: Array<Exercise>):
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        var exerciseName = view.findViewById<TextView>(R.id.level_name)
-        var exerciseImage = view.findViewById<ImageView>(R.id.level_image)
+        var exerciseName: TextView = view.findViewById(R.id.level_name)
+        var exerciseImage: ImageView = view.findViewById(R.id.level_image)
     }
 }

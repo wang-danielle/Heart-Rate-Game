@@ -63,13 +63,13 @@ class CustomLevelFragment : Fragment() {
         }
 
         binding.exerciseRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        viewModel.listenForExercises(context)
         viewModel.exercisesUpdate.observe(viewLifecycleOwner, Observer { exercisesUpdate ->
             if (exercisesUpdate == true) {
                 binding.exerciseRecyclerView.adapter = viewModel.exercisesItemAdapter
                 viewModel.resetUpdate()
             }
         })
+        viewModel.listenForExercises(context)
 
         sharedViewModel.levelData.observe(viewLifecycleOwner, Observer { levelData ->
             viewModel.exercises = levelData.exercises
@@ -77,10 +77,18 @@ class CustomLevelFragment : Fragment() {
         })
 
         binding.createButton.setOnClickListener {
+            if (sharedViewModel.levelData.value?.name == "") {
+                Toast.makeText(
+                    context,
+                    "Enter a level name",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
             if (sharedViewModel.levelData.value?.exercises?.isEmpty() == true) {
                 Toast.makeText(
                     context,
-                    "You must add exercises!",
+                    "You must add exercises",
                     Toast.LENGTH_SHORT
                 ).show()
                 return@setOnClickListener
