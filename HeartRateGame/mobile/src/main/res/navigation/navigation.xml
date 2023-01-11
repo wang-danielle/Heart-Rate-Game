@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_levelSelectionFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
+        <action
+            android:id="@+id/action_levelSelectionFragment_to_loginProfileFragment"
+            app:destination="@id/loginProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/timeSelectionFragment"
@@ -98,4 +101,8 @@
             android:name="failReason"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/loginProfileFragment"
+        android:name="com.example.heartrategame.LoginProfileFragment"
+        android:label="LoginProfileFragment" />
 </navigation>

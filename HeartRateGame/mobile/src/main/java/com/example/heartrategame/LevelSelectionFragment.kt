@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.heartrategame.databinding.FragmentLevelSelectionBinding
 import com.example.heartrategame.room.LevelDatabase
 
@@ -42,6 +44,21 @@ class LevelSelectionFragment : Fragment() {
         viewModel.levels.observe(viewLifecycleOwner, Observer { loadedLevels ->
             viewModel.listenForLevels(context, loadedLevels)
         })
+
+        val currentUser = (activity as MainActivity).auth.currentUser
+        if (currentUser == null) {
+            binding.accountButton.setOnClickListener {
+                Navigation.findNavController(it)
+                    .navigate(R.id.action_levelSelectionFragment_to_loginProfileFragment)
+            }
+        } else {
+            currentUser.photoUrl?.let {
+                Glide
+                    .with(context as MainActivity)
+                    .load(currentUser.photoUrl)
+                    .into(binding.accountButton)
+            }
+        }
 
         return binding.root
     }
