@@ -1,10 +1,6 @@
 package com.example.heartrategame
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.net.Uri
-import android.provider.MediaStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,16 +11,16 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.UploadTask
-import java.io.ByteArrayOutputStream
 
 class LoginProfileViewModel(
     private val auth: FirebaseAuth
 ) : ViewModel() {
     var imageUri: Uri? = null
 
-    var storageRef = FirebaseStorage.getInstance().reference
+    val storageRef = FirebaseStorage.getInstance().reference
+    val usersRef = FirebaseDatabase.getInstance().getReference("Users")
 
     private var _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?>
@@ -48,38 +44,13 @@ class LoginProfileViewModel(
                     _errorMessage.value = when (task.exception) {
                         is FirebaseAuthInvalidUserException -> "User not found"
                         is FirebaseAuthInvalidCredentialsException -> "Incorrect password"
-                        else -> "Unknown error"
+                        else -> "Unknown error ${task.exception?.message}"
                     }
                 }
             }
     }
 
-    private fun uploadImage(username: String, context: Context): UploadTask? {
-        if (imageUri == null) {
-            return null
-        }
-
-        val profileImageRef = storageRef.child("ProfileImages/$username.jpg")
-        val matrix = Matrix()
-        matrix.postRotate(90F)
-        var imageBitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
-        val ratio = 13F
-        val imageBitmapScaled = Bitmap.createScaledBitmap(
-            imageBitmap,
-            (imageBitmap.width / ratio).toInt(), (imageBitmap.height / ratio).toInt(), false
-        )
-        imageBitmap = Bitmap.createBitmap(
-            imageBitmapScaled, 0, 0,
-            (imageBitmap.width / ratio).toInt(), (imageBitmap.height / ratio).toInt(),
-            matrix, true
-        )
-        val stream = ByteArrayOutputStream()
-        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        val imageByteArray = stream.toByteArray()
-        return profileImageRef.putBytes(imageByteArray)
-    }
-
-    fun signUp(username: String, password: String, context: Context) {
+    fun signUp(username: String, password: String) {
         if (username == "") {
             _errorMessage.value = "Enter a username"
             return
@@ -92,27 +63,41 @@ class LoginProfileViewModel(
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {
-                val uploadTask = uploadImage(username, context)
-                if (uploadTask == null) {
-                    _errorMessage.value = null
+                if (imageUri == null) {
+                    auth.currentUser!!.updateProfile(
+                        userProfileChangeRequest {
+                            displayName = username
+                        }
+                    ).addOnFailureListener {
+                        _errorMessage.value = "Failed to set profile info"
+                        auth.currentUser?.delete()
+                    }.addOnSuccessListener {
+                        usersRef.child("Username").setValue(username)
+                        _errorMessage.value = null
+                    }
                     return@addOnSuccessListener
                 }
 
-                uploadTask.addOnFailureListener {
+                val profileImageRef = storageRef.child("ProfileImages/$username")
+                profileImageRef.putFile(imageUri!!).addOnFailureListener {
                     _errorMessage.value = "Failed to upload profile picture"
+                    auth.currentUser?.delete()
                 }.addOnSuccessListener {
-                    val urlTask = storageRef.child("ProfileImages/$username.jpg").downloadUrl
+                    val urlTask = profileImageRef.downloadUrl
                     urlTask.addOnFailureListener {
                         _errorMessage.value = "Failed to set profile picture"
+                        auth.currentUser?.delete()
                     }.addOnSuccessListener { downloadUrl ->
-                        auth!!.currentUser!!.updateProfile(
+                        auth.currentUser!!.updateProfile(
                             userProfileChangeRequest {
                                 displayName = username
                                 photoUri = downloadUrl
                             }
                         ).addOnFailureListener {
-                            _errorMessage.value = "Failed to set profile picture"
+                            _errorMessage.value = "Failed to set profile info"
+                            auth.currentUser?.delete()
                         }.addOnSuccessListener {
+                            usersRef.child("Username").setValue(username)
                             _errorMessage.value = null
                         }
                     }
@@ -122,7 +107,7 @@ class LoginProfileViewModel(
                     is FirebaseAuthWeakPasswordException -> "Password too weak (must be >5 characters long)"
                     is FirebaseAuthInvalidCredentialsException -> "Username cannot contain special characters"
                     is FirebaseAuthUserCollisionException -> "This username is already in use"
-                    else -> "Unknown error"
+                    else -> "Unknown error ${exception.message}"
                 }
             }
     }

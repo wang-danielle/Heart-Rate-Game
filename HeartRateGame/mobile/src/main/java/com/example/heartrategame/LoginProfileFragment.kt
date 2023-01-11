@@ -58,12 +58,14 @@ class LoginProfileFragment : Fragment() {
         }
 
         binding.signUpButton.setOnClickListener {
+            binding.signUpButton.isClickable = false
             val username = binding.usernameEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
-            viewModel.signUp(username, password, context!!)
+            viewModel.signUp(username, password)
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner, Observer { msg ->
+            binding.signUpButton.isClickable = true
             if (msg == null) {
                 view?.findNavController()?.popBackStack()
             } else {

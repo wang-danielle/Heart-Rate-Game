@@ -26,7 +26,7 @@ class AccountFragment : Fragment() {
 
         val auth = (activity as MainActivity).auth
         val currentUser = auth.currentUser!!
-        val username = currentUser.email!!.dropLast("@heartrategame.com".length)
+        val username = currentUser.displayName!!
         binding.welcomeTextView.text = "Welcome, $username!"
         currentUser.photoUrl?.let {
             Glide
