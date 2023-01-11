@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.example.heartrategame.databinding.FragmentAccountBinding
@@ -41,6 +42,10 @@ class AccountFragment : Fragment() {
         binding.signOutButton.setOnClickListener {
             auth.signOut()
             view?.findNavController()?.popBackStack()
+        }
+        binding.friendsButton.setOnClickListener {
+            Navigation.findNavController(it)
+                .navigate(R.id.action_accountFragment_to_friendsListFragment)
         }
 
         return binding.root
