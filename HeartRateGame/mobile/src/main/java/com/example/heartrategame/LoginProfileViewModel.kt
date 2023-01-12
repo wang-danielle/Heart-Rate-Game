@@ -72,9 +72,7 @@ class LoginProfileViewModel(
                         _errorMessage.value = "Failed to set profile info"
                         auth.currentUser?.delete()
                     }.addOnSuccessListener {
-                        usersRef.child(username).child("Friends").setValue("")
-                        usersRef.child(username).child("FriendRequests").setValue("")
-                        usersRef.child(username).child("SentRequests").setValue("")
+                        usersRef.child(username).setValue("")
                         _errorMessage.value = null
                     }
                     return@addOnSuccessListener
@@ -99,9 +97,7 @@ class LoginProfileViewModel(
                             _errorMessage.value = "Failed to set profile info"
                             auth.currentUser?.delete()
                         }.addOnSuccessListener {
-                            usersRef.child(username).child("Friends").setValue("")
-                            usersRef.child(username).child("FriendRequests").setValue("")
-                            usersRef.child(username).child("SentRequests").setValue("")
+                            usersRef.child(username).setValue("")
                             _errorMessage.value = null
                         }
                     }

@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.heartrategame.room.ScoreDatabase
 import com.example.heartrategame.room.ScoreEntity
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class ResultsViewModel(
     private val roomDatabase: ScoreDatabase,
     private val levelId: Long,
+    private val username: String?
 ) : ViewModel() {
     private val _bestScore = MutableLiveData<Double>()
     var isNewBestScore = false
@@ -30,6 +32,7 @@ class ResultsViewModel(
                         bestScore = currScore
                     )
                 )
+                postScoreToDatabase(levelId)
                 return@launch
             }
 
@@ -44,18 +47,34 @@ class ResultsViewModel(
             } else {
                 _bestScore.postValue(storedBestScore)
             }
+            postScoreToDatabase(levelId)
+        }
+    }
+
+    fun postScoreToDatabase(levelId: Long) {
+        if (username == null) {
+            return
+        }
+        val scoresRef = FirebaseDatabase.getInstance()
+            .getReference("Users")
+            .child(username)
+            .child("Scores")
+        if (levelId < 0) {
+            scoresRef.child(levelId.toString()).setValue(_bestScore.value)
         }
     }
 
     class Factory(
         private val database: ScoreDatabase,
         private val levelId: Long,
+        private val username: String?
         ): ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ResultsViewModel(
                 database,
-                levelId
+                levelId,
+                username
             ) as T
         }
     }

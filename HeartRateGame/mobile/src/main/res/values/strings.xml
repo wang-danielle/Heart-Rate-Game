@@ -21,7 +21,7 @@
     <string name="blank_max">MAX: -</string>
     <string name="blank_avg">AVG: -</string>
     <string name="new_best_score">NEW BEST SCORE!</string>
-    <string name="best_score">Best Score:</string>
+    <string name="best_score">Best Score: </string>
     <string name="your_score">Your Score:</string>
     <string name="sign_up">Sign up</string>
     <string name="sign_in">Sign in</string>

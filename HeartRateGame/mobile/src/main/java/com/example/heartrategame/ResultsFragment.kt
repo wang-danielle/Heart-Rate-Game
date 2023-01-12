@@ -46,7 +46,8 @@ class ResultsFragment : Fragment() {
 
         val application = requireNotNull(context as MainActivity).application
         val database = ScoreDatabase.getInstance(application)
-        val factory = ResultsViewModel.Factory(database, args.levelId)
+        val username = (activity as MainActivity).auth.currentUser?.displayName
+        val factory = ResultsViewModel.Factory(database, args.levelId, username)
         viewModel = ViewModelProvider(this, factory).get(ResultsViewModel::class.java)
         viewModel.bestScore.observe(viewLifecycleOwner, Observer {
             binding.newBestScoreLabel.visibility =
