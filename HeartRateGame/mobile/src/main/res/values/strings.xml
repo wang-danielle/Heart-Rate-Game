@@ -31,4 +31,7 @@
     <string name="sign_out">Sign out</string>
     <string name="select_exercise">Select Exercise</string>
     <string name="friends">Friends</string>
+    <string name="create">Create</string>
+    <string name="send_friend_request">Send Friend Request</string>
+    <string name="pending_requests">PENDING REQUESTS</string>
 </resources>

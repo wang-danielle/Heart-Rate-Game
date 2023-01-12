@@ -95,7 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/pink_600"
-                    android:text="Create"
+                    android:text="@string/create"
                     android:textSize="20sp"
                     android:textColor="@color/white"
                     android:gravity="center"

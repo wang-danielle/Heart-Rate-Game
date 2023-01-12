@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.heartrategame.LevelSelectionFragmentDirections
 import com.example.heartrategame.room.LevelEntity
 import com.example.heartrategame.R
