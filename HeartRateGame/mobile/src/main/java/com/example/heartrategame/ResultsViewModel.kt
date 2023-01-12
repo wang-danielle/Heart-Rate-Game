@@ -51,7 +51,7 @@ class ResultsViewModel(
         }
     }
 
-    fun postScoreToDatabase(levelId: Long) {
+    private fun postScoreToDatabase(levelId: Long) {
         if (username == null) {
             return
         }

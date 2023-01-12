@@ -35,4 +35,6 @@
     <string name="send_friend_request">Send Friend Request</string>
     <string name="outgoing_requests">OUTGOING REQUESTS</string>
     <string name="friend_requests">Friend Requests</string>
+    <string name="profile">Profile</string>
+    <string name="best_scores">BEST SCORES</string>
 </resources>
