@@ -29,7 +29,7 @@ class AddFriendViewModel(
         sentRequestsRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val requests = dataSnapshot.children.map {
-                    it.value.toString()
+                    it.key ?: ""
                 }
 
                 sentRequestsItemAdapter = context?.let {
@@ -61,12 +61,12 @@ class AddFriendViewModel(
                     if (username == targetUsername) {
                         usersRef.child(targetUsername)
                             .child("FriendRequests")
-                            .child("Username")
-                            .setValue(myUsername)
+                            .child(myUsername)
+                            .setValue("")
                         usersRef.child(myUsername)
                             .child("SentRequests")
-                            .child("Username")
-                            .setValue(targetUsername)
+                            .child(targetUsername)
+                            .setValue("")
                             .addOnSuccessListener {
                                 _errorMessage.value = null
                             }
