@@ -28,8 +28,8 @@ class FriendsListViewModel(
     fun listenForFriends(context: Context?) {
         friendsRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val friends = dataSnapshot.children.map {
-                    it.value.toString()
+                val friends = dataSnapshot.children.mapNotNull {
+                    it.key
                 }
 
                 friendsItemAdapter = context?.let {

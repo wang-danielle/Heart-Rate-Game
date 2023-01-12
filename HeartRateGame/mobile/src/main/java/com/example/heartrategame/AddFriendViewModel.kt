@@ -28,8 +28,8 @@ class AddFriendViewModel(
     fun listenForSentRequests(context: Context?) {
         sentRequestsRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val requests = dataSnapshot.children.map {
-                    it.key ?: ""
+                val requests = dataSnapshot.children.mapNotNull {
+                    it.key
                 }
 
                 sentRequestsItemAdapter = context?.let {
@@ -54,6 +54,9 @@ class AddFriendViewModel(
             _errorMessage.value = "That's you!"
             return
         }
+
+        // TODO: check existing friends
+
         usersRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (user in dataSnapshot.children) {
@@ -70,6 +73,7 @@ class AddFriendViewModel(
                             .addOnSuccessListener {
                                 _errorMessage.value = null
                             }
+                        return
                     }
                 }
                 _errorMessage.value = "User not found"

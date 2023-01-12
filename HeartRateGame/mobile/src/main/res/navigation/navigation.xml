@@ -125,10 +125,18 @@
         <action
             android:id="@+id/action_friendsListFragment_to_addFriendFragment"
             app:destination="@id/addFriendFragment" />
+        <action
+            android:id="@+id/action_friendsListFragment_to_friendRequestsFragment"
+            app:destination="@id/friendRequestsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFriendFragment"
         android:name="com.example.heartrategame.AddFriendFragment"
         android:label="fragment_add_friend"
         tools:layout="@layout/fragment_add_friend" />
+    <fragment
+        android:id="@+id/friendRequestsFragment"
+        android:name="com.example.heartrategame.FriendRequestsFragment"
+        android:label="fragment_friend_requests"
+        tools:layout="@layout/fragment_friend_requests" />
 </navigation>

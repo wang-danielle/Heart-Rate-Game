@@ -39,10 +39,10 @@ class AddFriendFragment : Fragment() {
             viewModel.sendFriendRequest(targetUsername)
         }
 
-        binding.pendingRequestsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.outgoingRequestsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         viewModel.sentRequestsUpdate.observe(viewLifecycleOwner, Observer { sentRequestsUpdate ->
             if (sentRequestsUpdate == true) {
-                binding.pendingRequestsRecyclerView.adapter = viewModel.sentRequestsItemAdapter
+                binding.outgoingRequestsRecyclerView.adapter = viewModel.sentRequestsItemAdapter
                 viewModel.resetUpdate()
             }
         })

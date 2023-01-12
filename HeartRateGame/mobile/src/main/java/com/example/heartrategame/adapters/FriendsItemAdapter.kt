@@ -41,7 +41,6 @@ class FriendsItemAdapter(val context: Context, val friends: List<String>)
 
         val username = friends[position]
         holder.username.text = username
-        holder.requestButtons.visibility = View.VISIBLE
 
         val profileImageRef = storageRef.child("ProfileImages/$username")
         profileImageRef.downloadUrl.addOnSuccessListener {
@@ -60,8 +59,5 @@ class FriendsItemAdapter(val context: Context, val friends: List<String>)
         var username: TextView = view.findViewById(R.id.username)
         var profilePicture: ImageView = view.findViewById(R.id.profile_picture)
         var bottomLine: View = view.findViewById(R.id.bottom_line)
-        var requestButtons: View = view.findViewById(R.id.request_buttons)
-        var acceptButton: View = view.findViewById(R.id.accept_button)
-        var denyButton: View = view.findViewById(R.id.deny_button)
     }
 }
