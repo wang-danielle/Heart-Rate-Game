@@ -24,7 +24,7 @@ class LevelSelectionViewModel(
     fun listenForLevels(context: Context?, loadedLevels: List<LevelEntity>? = null) {
         val baseLevels = LevelDataClass.getBaseLevels().map {
             LevelEntity(
-                id = -(it.exercises[0].first.ordinal).toLong(),
+                id = -(it.exercises[0].first.ordinal + 1).toLong(),
                 levelData = it
             )
         }
