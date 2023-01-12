@@ -77,7 +77,8 @@ class CustomLevelFragment : Fragment() {
         })
 
         binding.createButton.setOnClickListener {
-            if (sharedViewModel.levelData.value?.name == "") {
+            val levelName = binding.levelNameEditText.text.toString()
+            if (levelName == "") {
                 Toast.makeText(
                     context,
                     "Enter a level name",
@@ -93,7 +94,7 @@ class CustomLevelFragment : Fragment() {
                 ).show()
                 return@setOnClickListener
             }
-            sharedViewModel.saveLevel(binding.levelNameEditText.text.toString())
+            sharedViewModel.saveLevel(levelName)
             view?.findNavController()?.popBackStack()
             sharedViewModel.resetLevel()
         }
