@@ -59,16 +59,22 @@ class LoginProfileFragment : Fragment() {
 
         binding.signUpButton.setOnClickListener {
             binding.signUpButton.isClickable = false
+            binding.signInButton.isClickable = false
+            binding.userImageButton.visibility = View.INVISIBLE
+            binding.loadingWheel.visibility = View.VISIBLE
             val username = binding.usernameEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
             viewModel.signUp(username, password)
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner, Observer { msg ->
-            binding.signUpButton.isClickable = true
             if (msg == null) {
                 view?.findNavController()?.popBackStack()
             } else {
+                binding.signUpButton.isClickable = true
+                binding.signInButton.isClickable = false
+                binding.userImageButton.visibility = View.VISIBLE
+                binding.loadingWheel.visibility = View.INVISIBLE
                 Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
             }
         })
