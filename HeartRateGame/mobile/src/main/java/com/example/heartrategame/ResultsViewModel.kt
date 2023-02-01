@@ -25,20 +25,21 @@ class ResultsViewModel(
             val scoreEntity = roomDatabase.scoreDao.findScoreForLevel(levelId)
             if (scoreEntity == null) {
                 isNewBestScore = true
-                _bestScore.postValue(currScore)
                 roomDatabase.scoreDao.insert(
                     ScoreEntity(
                         levelId = levelId,
                         bestScore = currScore
                     )
                 )
-                postScoreToDatabase(levelId)
+                postScoreToDatabase(currScore, levelId)
+                _bestScore.postValue(currScore)
                 return@launch
             }
 
             val storedBestScore = scoreEntity.bestScore
             if (currScore < storedBestScore) {
                 isNewBestScore = true
+                postScoreToDatabase(currScore, levelId)
                 _bestScore.postValue(currScore)
                 scoreEntity.bestScore = currScore
                 roomDatabase.scoreDao.update(
@@ -47,11 +48,10 @@ class ResultsViewModel(
             } else {
                 _bestScore.postValue(storedBestScore)
             }
-            postScoreToDatabase(levelId)
         }
     }
 
-    private fun postScoreToDatabase(levelId: Long) {
+    private fun postScoreToDatabase(score: Double, levelId: Long) {
         if (username == null) {
             return
         }
@@ -60,7 +60,7 @@ class ResultsViewModel(
             .child(username)
             .child("Scores")
         if (levelId < 0) {
-            scoresRef.child(levelId.toString()).setValue(_bestScore.value)
+            scoresRef.child(levelId.toString()).setValue(score)
         }
     }
 

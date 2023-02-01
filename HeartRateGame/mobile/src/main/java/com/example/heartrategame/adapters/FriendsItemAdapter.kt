@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.heartrategame.FriendsListFragmentDirections
 import com.example.heartrategame.MainActivity
 import com.example.heartrategame.R
 import com.google.firebase.storage.FirebaseStorage
@@ -48,6 +49,13 @@ class FriendsItemAdapter(val context: Context, val friends: List<String>)
                 .with(context as MainActivity)
                 .load(it)
                 .into(holder.profilePicture)
+        }
+
+        holder.itemView.setOnClickListener {
+            val directions = FriendsListFragmentDirections.actionFriendsListFragmentToFriendProfileFragment(
+                username
+            )
+            Navigation.findNavController(it).navigate(directions)
         }
     }
 
